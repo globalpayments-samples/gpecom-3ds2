@@ -1,13 +1,27 @@
 {
-    "name": "shane/php",
+    "name": "gpecom/3ds2-testing",
+    "description": "Global Payments eCOM 3D Secure 2 Testing Environment",
+    "type": "project",
     "require": {
-        "globalpayments/php-sdk": "^13.1",
-        "vlucas/phpdotenv": "^5.5"
+        "php": ">=7.4",
+        "vlucas/phpdotenv": "^5.5",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "GpecomSdk\\": "src/"
+        }
     },
     "authors": [
         {
-            "name": "Shane Logsdon",
-            "email": "shane@shanelogsdon.com"
+            "name": "Radoslav",
+            "email": "radoslav@example.com"
         }
-    ]
+    ],
+    "scripts": {
+        "test": "php -S localhost:8080",
+        "logs": "tail -f logs/*.log"
+    }
 }
