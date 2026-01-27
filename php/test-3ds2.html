@@ -547,7 +547,6 @@
             updateStep(1);
             showStatus('info', 'Step 1: Checking Enrollment', 'Verifying card enrollment in 3DS2...');
 
-            const isChallengeCar = challengeCards.includes(formData.cardNumber);
             const response = await fetch('/api/check-enrollment.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
