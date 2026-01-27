@@ -80,7 +80,26 @@ try {
         'account' => $input['account'] ?? 'internet'
     ];
 
-    // Authorize payment
+    // Check if demo mode is enabled
+    $demoMode = isset($input['demo_mode']) && $input['demo_mode'] === true;
+
+    if ($demoMode) {
+        // Simulate payment authorization
+        echo json_encode([
+            'success' => true,
+            'demo_mode' => true,
+            'data' => [
+                'authorized' => true,
+                'transaction_id' => 'DEMO-' . strtoupper(substr(uniqid(), -8)),
+                'order_id' => $options['order_id'],
+                'message' => 'Demo Mode - Payment Authorized',
+                'timestamp' => date('YmdHis')
+            ]
+        ]);
+        exit;
+    }
+
+    // Authorize payment with actual API
     $response = $client->authorizePayment(
         $input['card_number'],
         $input['amount'],

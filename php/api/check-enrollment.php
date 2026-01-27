@@ -65,14 +65,56 @@ try {
         'exp_date' => $input['exp_date'] ?? '1225',
         'card_holder' => $input['card_holder'] ?? 'John Doe',
         'card_type' => $input['card_type'] ?? 'VISA',
-        'account' => $input['account'] ?? 'internet'
+        'account' => $input['account'] ?? 'internet',
+        'amount' => $input['amount'] ?? '1000',
+        'currency' => $input['currency'] ?? 'USD'
     ];
 
-    // Check enrollment
+    // Check if demo mode is enabled (for testing when 3DS2 is not configured)
+    $demoMode = isset($input['demo_mode']) && $input['demo_mode'] === true;
+
+    if ($demoMode) {
+        // Simulate enrollment response for UI testing
+        $isChallenge = in_array($input['card_number'], [
+            '4012001037461114', // Visa Challenge
+            '5425230000004407'  // MC Challenge
+        ]);
+
+        echo json_encode([
+            'success' => true,
+            'demo_mode' => true,
+            'data' => [
+                'enrolled' => 'Y',
+                'server_trans_id' => 'demo-' . uniqid(),
+                'method_url' => '',
+                'ds_trans_id' => 'demo-ds-' . uniqid(),
+                'order_id' => $options['order_id'],
+                'pasref' => 'demo-' . time(),
+                'message' => 'Demo Mode - Card enrolled',
+                'challenge_simulation' => $isChallenge
+            ]
+        ]);
+        exit;
+    }
+
+    // Check enrollment with actual API
     $response = $client->check3DS2Enrollment($input['card_number'], $options);
 
     // Check if request was successful
     if ($response['result'] !== '00') {
+        // Check for MPI not configured error
+        if ($response['result'] === '503' && stripos($response['message'], 'mpi') !== false) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => '3DS2 not configured',
+                'message' => 'Your Global Payments account does not have 3D Secure 2 (MPI) enabled. Please contact Global Payments support to enable 3DS2 on your sandbox account, or enable Demo Mode for UI testing.',
+                'hint' => 'Click "Enable Demo Mode" above the form to test the UI flow.',
+                'details' => $response
+            ]);
+            exit;
+        }
+
         http_response_code(400);
         echo json_encode([
             'success' => false,
@@ -103,6 +145,9 @@ try {
     echo json_encode([
         'success' => false,
         'error' => 'Server error',
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine()
     ]);
 }

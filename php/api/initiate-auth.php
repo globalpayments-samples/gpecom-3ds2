@@ -78,7 +78,57 @@ try {
         $options['customer'] = $input['customer'];
     }
 
-    // Initiate authentication
+    // Check if demo mode is enabled
+    $demoMode = isset($input['demo_mode']) && $input['demo_mode'] === true;
+
+    if ($demoMode) {
+        // Simulate authentication response
+        $isChallenge = isset($input['challenge_simulation']) && $input['challenge_simulation'] === true;
+
+        if ($isChallenge) {
+            echo json_encode([
+                'success' => true,
+                'demo_mode' => true,
+                'data' => [
+                    'challenge_required' => true,
+                    'status' => 'C',
+                    'order_id' => $options['order_id'],
+                    'pasref' => 'demo-' . time(),
+                    'message' => 'Demo Mode - Challenge Required',
+                    'challenge' => [
+                        'acs_url' => '/webhooks/challenge-notification.php',
+                        'creq' => base64_encode(json_encode([
+                            'threeDSServerTransID' => 'demo-' . uniqid(),
+                            'messageType' => 'CReq',
+                            'demo' => true
+                        ])),
+                        'server_trans_id' => 'demo-' . uniqid()
+                    ]
+                ]
+            ]);
+        } else {
+            echo json_encode([
+                'success' => true,
+                'demo_mode' => true,
+                'data' => [
+                    'challenge_required' => false,
+                    'status' => 'Y',
+                    'order_id' => $options['order_id'],
+                    'pasref' => 'demo-' . time(),
+                    'message' => 'Demo Mode - Frictionless Success',
+                    'auth_data' => [
+                        'eci' => '05',
+                        'cavv' => 'AAABBZIhcQAAAABvllEIRoEoAAA=',
+                        'xid' => base64_encode('demo-' . uniqid()),
+                        'ds_trans_id' => 'demo-ds-' . uniqid()
+                    ]
+                ]
+            ]);
+        }
+        exit;
+    }
+
+    // Initiate authentication with actual API
     $response = $client->initiate3DS2Authentication(
         $input['card_number'],
         $input['amount'],

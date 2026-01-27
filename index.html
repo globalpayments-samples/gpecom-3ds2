@@ -3,11 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Payments - Developer Example</title>
+    <title>Global Payments - 3D Secure 2 Testing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://globalpayments-samples.github.io/css/styles.csscss/styles.css">
+    <link rel="stylesheet" href="https://globalpayments-samples.github.io/css/styles.css">
+    <style>
+        /* 3DS2 Flow Progress Indicator */
+        .gp-progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+        .gp-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .gp-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+        }
+        .gp-step.completed:not(:last-child)::after {
+            background: #00a651;
+        }
+        .gp-step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .gp-step.active .gp-step-circle {
+            background: #00263e;
+            color: white;
+        }
+        .gp-step.completed .gp-step-circle {
+            background: #00a651;
+            color: white;
+        }
+        .gp-step-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .gp-step.active .gp-step-label {
+            color: #00263e;
+            font-weight: 600;
+        }
+
+        /* Test Cards Grid */
+        .gp-test-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .gp-test-card {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .gp-test-card:hover {
+            border-color: #00263e;
+            background: #f8f9fa;
+        }
+        .gp-test-card-number {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #00263e;
+            font-size: 14px;
+        }
+        .gp-test-card-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Challenge iframe */
+        #challengeFrame {
+            width: 100%;
+            height: 450px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+        }
+
+        /* JSON Display */
+        .gp-json-display {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Loading spinner */
+        .gp-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: gp-spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes gp-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Collapsible sections */
+        .gp-collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .gp-collapsible-header::before {
+            content: '▼';
+            font-size: 10px;
+            transition: transform 0.2s;
+        }
+        .gp-collapsible-header.collapsed::before {
+            transform: rotate(-90deg);
+        }
+        .gp-collapsible-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .gp-collapsible-content.hidden {
+            max-height: 0 !important;
+        }
+
+        /* Status badges */
+        .gp-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .gp-badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .gp-badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .gp-badge-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Hero section */
+        .gp-hero {
+            background: linear-gradient(135deg, #00263e 0%, #004d7a 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .gp-hero h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.75rem;
+        }
+        .gp-hero p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        .gp-hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -22,192 +215,617 @@
                 </div>
                 <nav class="gp-header-nav">
                     <a href="https://developer.globalpay.com/">Documentation</a>
+                    <a href="https://developer.globalpay.com/ecommerce/3d-secure-two">3DS2 Guide</a>
                     <a href="https://developer.globalpay.com/api">API Reference</a>
-                    <a href="https://developer.globalpay.com/sdks">SDKs</a>
                 </nav>
             </div>
         </div>
     </header>
 
     <div class="gp-container">
-        <!-- Page Title -->
-        <h1 class="gp-page-title">SDK Integration Examples</h1>
-        <p class="gp-page-subtitle">Explore comprehensive examples of Global Payments SDK implementations across different payment scenarios.</p>
+        <!-- Hero Section -->
+        <div class="gp-hero">
+            <span class="gp-hero-badge">GPeCOM XML API</span>
+            <h1>3D Secure 2 Testing Environment</h1>
+            <p>Test and validate 3DS2 authentication flows with Global Payments' GPeCOM product suite.</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="gp-progress-steps">
+            <div class="gp-step" id="step1">
+                <div class="gp-step-circle">1</div>
+                <div class="gp-step-label">Enrollment</div>
+            </div>
+            <div class="gp-step" id="step2">
+                <div class="gp-step-circle">2</div>
+                <div class="gp-step-label">Method URL</div>
+            </div>
+            <div class="gp-step" id="step3">
+                <div class="gp-step-circle">3</div>
+                <div class="gp-step-label">Authentication</div>
+            </div>
+            <div class="gp-step" id="step4">
+                <div class="gp-step-circle">4</div>
+                <div class="gp-step-label">Challenge</div>
+            </div>
+            <div class="gp-step" id="step5">
+                <div class="gp-step-circle">5</div>
+                <div class="gp-step-label">Payment</div>
+            </div>
+        </div>
 
         <!-- Tabs -->
         <div class="gp-tabs">
             <div class="gp-tab-list">
-                <button class="gp-tab-button active" data-tab="payment-form">Payment Form</button>
-                <button class="gp-tab-button" data-tab="tokenization">Tokenization</button>
-                <button class="gp-tab-button" data-tab="webhooks">Webhooks</button>
-                <button class="gp-tab-button" data-tab="recurring">Recurring Payments</button>
+                <button class="gp-tab-button active" data-tab="3ds2-form">3DS2 Authentication</button>
+                <button class="gp-tab-button" data-tab="test-cards">Test Cards</button>
+                <button class="gp-tab-button" data-tab="response-log">Response Log</button>
             </div>
 
-            <!-- Payment Form Tab -->
-            <div class="gp-tab-content active" id="payment-form">
+            <!-- 3DS2 Form Tab -->
+            <div class="gp-tab-content active" id="3ds2-form">
                 <div class="gp-card">
                     <div class="gp-card-header">
-                        <h2 class="gp-card-title">Credit Card Payment Form</h2>
+                        <h2 class="gp-card-title">3DS2 Payment Authentication</h2>
                         <p class="gp-card-description">
-                            Secure payment processing using Global Payments tokenization with client-side form validation.
+                            Test 3D Secure 2 authentication with frictionless approval or challenge flows.
                         </p>
                     </div>
-                    
-                    <form id="payment-form" class="gp-form" action="/process-payment.php" method="POST">
-                        <div class="gp-form-group">
-                            <label for="amount" class="gp-label">Amount ($):</label>
-                            <input type="number" id="amount" name="amount" class="gp-input" min="0.01" step="0.01" value="10.00" required>
-                        </div>
-                        
-                        <div class="gp-form-group">
-                            <label for="billing_zip" class="gp-label">Billing Zip Code:</label>
-                            <input type="text" id="billing_zip" name="billing_zip" class="gp-input" placeholder="12345" required>
-                        </div>
 
-                        <div class="gp-form-group">
-                            <label class="gp-label">Credit Card Information:</label>
-                            <div id="credit-card"></div>
+                    <!-- Demo Mode Toggle -->
+                    <div class="gp-alert gp-alert-warning" style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong>Demo Mode</strong>
+                                <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Enable to test UI flow without actual API calls (use when 3DS2 is not configured on your account)</p>
+                            </div>
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="checkbox" id="demoMode" style="width: 20px; height: 20px; margin-right: 8px;">
+                                <span id="demoModeLabel">Off</span>
+                            </label>
                         </div>
-
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Process Payment
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Tokenization Tab -->
-            <div class="gp-tab-content" id="tokenization">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Card Tokenization</h2>
-                        <p class="gp-card-description">
-                            Securely tokenize payment methods for future use without storing sensitive card data.
-                        </p>
-                    </div>
-                    
-                    <div class="gp-alert gp-alert-info">
-                        <strong>Info:</strong> Tokens can be stored securely and used for future transactions without handling raw card data.
                     </div>
 
-                    <form id="tokenization-form" class="gp-form">
+                    <form id="paymentForm" class="gp-form">
                         <div class="gp-form-group">
-                            <label class="gp-label">Card Information for Tokenization:</label>
-                            <div id="credit-card-token"></div>
+                            <label for="cardNumber" class="gp-label">Card Number:</label>
+                            <input type="text" id="cardNumber" name="cardNumber" class="gp-input" placeholder="4263970000005262" maxlength="19" required>
                         </div>
 
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Generate Token
-                        </button>
-                    </form>
-
-                    <div id="token-result" class="gp-hidden">
-                        <h3 class="gp-card-title gp-mt-lg">Generated Token:</h3>
-                        <div class="gp-code-block" id="token-display"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Webhooks Tab -->
-            <div class="gp-tab-content" id="webhooks">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Webhook Integration</h2>
-                        <p class="gp-card-description">
-                            Configure and test webhook endpoints for real-time payment notifications.
-                        </p>
-                    </div>
-                    
-                    <div class="gp-code-block">
-// Example webhook handler
-app.post('/webhook', (req, res) => {
-    const signature = req.headers['x-gp-signature'];
-    const payload = req.body;
-    
-    // Verify webhook signature
-    if (verifySignature(payload, signature)) {
-        handlePaymentEvent(payload);
-        res.status(200).send('OK');
-    } else {
-        res.status(400).send('Invalid signature');
-    }
-});
-                    </div>
-
-                    <div class="gp-alert gp-alert-warning">
-                        <strong>Security:</strong> Always verify webhook signatures to ensure requests are from Global Payments.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recurring Payments Tab -->
-            <div class="gp-tab-content" id="recurring">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Recurring Payments</h2>
-                        <p class="gp-card-description">
-                            Set up subscription billing and recurring payment schedules.
-                        </p>
-                    </div>
-                    
-                    <form id="recurring-form" class="gp-form">
                         <div class="gp-form-row">
                             <div class="gp-form-group">
-                                <label for="subscription-amount" class="gp-label">Monthly Amount ($):</label>
-                                <input type="number" id="subscription-amount" name="subscription-amount" class="gp-input" min="1.00" step="0.01" value="29.99" required>
+                                <label for="expDate" class="gp-label">Expiry (MMYY):</label>
+                                <input type="text" id="expDate" name="expDate" class="gp-input" placeholder="1225" maxlength="4" required>
                             </div>
-                            
                             <div class="gp-form-group">
-                                <label for="billing-cycle" class="gp-label">Billing Cycle:</label>
-                                <select id="billing-cycle" name="billing-cycle" class="gp-select" required>
-                                    <option value="monthly">Monthly</option>
-                                    <option value="quarterly">Quarterly</option>
-                                    <option value="annually">Annually</option>
+                                <label for="cvv" class="gp-label">CVV:</label>
+                                <input type="text" id="cvv" name="cvv" class="gp-input" placeholder="123" maxlength="4" required>
+                            </div>
+                        </div>
+
+                        <div class="gp-form-group">
+                            <label for="cardHolder" class="gp-label">Cardholder Name:</label>
+                            <input type="text" id="cardHolder" name="cardHolder" class="gp-input" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="gp-form-row">
+                            <div class="gp-form-group">
+                                <label for="amount" class="gp-label">Amount (cents):</label>
+                                <input type="number" id="amount" name="amount" class="gp-input" placeholder="1000" value="1000" required>
+                            </div>
+                            <div class="gp-form-group">
+                                <label for="currency" class="gp-label">Currency:</label>
+                                <select id="currency" name="currency" class="gp-select" required>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="gp-form-group">
-                            <label class="gp-label">Payment Method:</label>
-                            <div id="credit-card-recurring"></div>
+                            <label for="email" class="gp-label">Email:</label>
+                            <input type="email" id="email" name="email" class="gp-input" placeholder="customer@example.com" value="test@example.com">
                         </div>
 
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Set Up Subscription
+                        <button type="submit" class="gp-button gp-button-primary gp-button-full" id="submitBtn">
+                            Start 3DS2 Authentication
                         </button>
                     </form>
+
+                    <!-- Status Display -->
+                    <div id="statusContainer" style="margin-top: 1.5rem;"></div>
+
+                    <!-- Challenge Frame -->
+                    <div id="challengeCard" class="gp-hidden" style="margin-top: 1.5rem;">
+                        <h3 class="gp-card-title">Authentication Challenge</h3>
+                        <p class="gp-card-description">Please complete the authentication below:</p>
+                        <iframe id="challengeFrame" name="challengeFrame"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Cards Tab -->
+            <div class="gp-tab-content" id="test-cards">
+                <div class="gp-card">
+                    <div class="gp-card-header">
+                        <h2 class="gp-card-title">Test Card Numbers</h2>
+                        <p class="gp-card-description">
+                            Click on a card to auto-fill the payment form. All cards use expiry 12/25 and CVV 123.
+                        </p>
+                    </div>
+
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Visa</h3>
+                    <div class="gp-test-cards">
+                        <div class="gp-test-card" onclick="fillTestCard('4263970000005262', 'VISA')">
+                            <div class="gp-test-card-number">4263970000005262</div>
+                            <div class="gp-test-card-desc">Frictionless Success</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4012001037461114', 'VISA')">
+                            <div class="gp-test-card-number">4012001037461114</div>
+                            <div class="gp-test-card-desc">Challenge Required</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4012001036853337', 'VISA')">
+                            <div class="gp-test-card-number">4012001036853337</div>
+                            <div class="gp-test-card-desc">Authentication Failed</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">Mastercard</h3>
+                    <div class="gp-test-cards">
+                        <div class="gp-test-card" onclick="fillTestCard('5425230000004415', 'MC')">
+                            <div class="gp-test-card-number">5425230000004415</div>
+                            <div class="gp-test-card-desc">Frictionless Success</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5425230000004407', 'MC')">
+                            <div class="gp-test-card-number">5425230000004407</div>
+                            <div class="gp-test-card-desc">Challenge Required</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">American Express</h3>
+                    <div class="gp-test-cards">
+                        <div class="gp-test-card" onclick="fillTestCard('374101000000608', 'AMEX', '1234')">
+                            <div class="gp-test-card-number">374101000000608</div>
+                            <div class="gp-test-card-desc">Frictionless Success</div>
+                        </div>
+                    </div>
+
+                    <div class="gp-alert gp-alert-info" style="margin-top: 1.5rem;">
+                        <strong>Info:</strong> Frictionless cards authenticate without additional user interaction. Challenge cards require the cardholder to complete an authentication step.
+                    </div>
+
+                    <div class="gp-alert gp-alert-warning" style="margin-top: 1rem;">
+                        <strong>Demo Mode:</strong> When Demo Mode is enabled, "Challenge Required" cards (4012001037461114, 5425230000004407) will simulate the challenge flow.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Log Tab -->
+            <div class="gp-tab-content" id="response-log">
+                <div class="gp-card">
+                    <div class="gp-card-header">
+                        <h2 class="gp-card-title">API Response Log</h2>
+                        <p class="gp-card-description">
+                            View detailed API responses from each step of the 3DS2 authentication flow.
+                        </p>
+                    </div>
+
+                    <div id="responseLog">
+                        <div class="gp-alert gp-alert-info">
+                            No responses yet. Start a 3DS2 authentication to see the API responses here.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <!-- 
-        DEVELOPER NOTE: Update the following footer information to match your business:
-        - Company name and copyright year
-        - Update all links to point to your actual Terms of Service, Privacy Policy, and Refund Policy pages
-        - Refund Policy link is typically required by payment processor underwriting in addition to Terms and Privacy
-        - Ensure all linked policies are accessible and up-to-date before going live
-    -->
     <footer class="gp-footer">
         <div class="gp-container">
             <div class="gp-footer-content">
                 <div class="gp-footer-section">
                     <p class="gp-footer-copyright">
-                        © 2024 Your Company Name. All rights reserved.
+                        &copy; 2024 Global Payments. GPeCOM 3DS2 Testing Environment.
                     </p>
                 </div>
                 <div class="gp-footer-section">
                     <nav class="gp-footer-nav">
-                        <a href="/terms-of-service" class="gp-footer-link">Terms of Service</a>
-                        <a href="/privacy-policy" class="gp-footer-link">Privacy Policy</a>
-                        <a href="/refund-policy" class="gp-footer-link">Refund Policy</a>
+                        <a href="https://developer.globalpay.com/" class="gp-footer-link">Developer Portal</a>
+                        <a href="https://developer.globalpay.com/ecommerce/3d-secure-two" class="gp-footer-link">3DS2 Documentation</a>
                     </nav>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script>
+        // Application state
+        const state = {
+            orderId: null,
+            serverTransId: null,
+            cardType: 'VISA',
+            responses: [],
+            demoMode: false
+        };
+
+        // Challenge cards (for demo mode simulation)
+        const challengeCards = ['4012001037461114', '5425230000004407'];
+
+        // Demo mode toggle
+        document.getElementById('demoMode').addEventListener('change', (e) => {
+            state.demoMode = e.target.checked;
+            document.getElementById('demoModeLabel').textContent = state.demoMode ? 'On' : 'Off';
+            if (state.demoMode) {
+                showStatus('info', 'Demo Mode Enabled', 'API calls will be simulated for UI testing.');
+            } else {
+                document.getElementById('statusContainer').innerHTML = '';
+            }
+        });
+
+        // Tab switching
+        document.querySelectorAll('.gp-tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+
+                document.querySelectorAll('.gp-tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.gp-tab-content').forEach(content => content.classList.remove('active'));
+
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Collect browser data
+        function getBrowserData() {
+            return {
+                accept_header: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                color_depth: String(screen.colorDepth),
+                java_enabled: 'false',
+                javascript_enabled: 'true',
+                language: navigator.language || 'en-US',
+                screen_height: String(screen.height),
+                screen_width: String(screen.width),
+                timezone: String(new Date().getTimezoneOffset()),
+                user_agent: navigator.userAgent,
+                challenge_window_size: '05'
+            };
+        }
+
+        // Update step status
+        function updateStep(stepNum, status = 'active') {
+            document.querySelectorAll('.gp-step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < stepNum) {
+                    step.classList.add('completed');
+                } else if (index + 1 === stepNum && status === 'active') {
+                    step.classList.add('active');
+                } else if (index + 1 === stepNum && status === 'completed') {
+                    step.classList.add('completed');
+                }
+            });
+        }
+
+        // Show status message
+        function showStatus(type, title, message) {
+            const container = document.getElementById('statusContainer');
+            const alertClass = type === 'success' ? 'gp-alert-success' :
+                              type === 'error' ? 'gp-alert-error' :
+                              type === 'warning' ? 'gp-alert-warning' : 'gp-alert-info';
+
+            container.innerHTML = `
+                <div class="gp-alert ${alertClass}">
+                    <strong>${title}</strong><br>${message}
+                </div>
+            `;
+        }
+
+        // Log response
+        function logResponse(step, data) {
+            state.responses.push({ step, data, timestamp: new Date().toISOString() });
+            updateResponseLog();
+        }
+
+        // Update response log
+        function updateResponseLog() {
+            const container = document.getElementById('responseLog');
+            if (state.responses.length === 0) {
+                container.innerHTML = '<div class="gp-alert gp-alert-info">No responses yet. Start a 3DS2 authentication to see the API responses here.</div>';
+                return;
+            }
+
+            container.innerHTML = state.responses.map((r, i) => `
+                <div style="margin-bottom: 1rem;">
+                    <div class="gp-collapsible-header" onclick="toggleCollapse(this)">
+                        <strong>Step ${i + 1}: ${r.step}</strong>
+                        <span class="gp-badge ${r.data.success ? 'gp-badge-success' : 'gp-badge-error'}">
+                            ${r.data.success ? 'Success' : 'Failed'}
+                        </span>
+                    </div>
+                    <div class="gp-collapsible-content" style="max-height: 300px;">
+                        <pre class="gp-json-display">${JSON.stringify(r.data, null, 2)}</pre>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Toggle collapsible
+        function toggleCollapse(element) {
+            element.classList.toggle('collapsed');
+            const content = element.nextElementSibling;
+            content.classList.toggle('hidden');
+        }
+
+        // Fill test card
+        function fillTestCard(number, type, cvv = '123') {
+            document.getElementById('cardNumber').value = number;
+            document.getElementById('expDate').value = '1225';
+            document.getElementById('cvv').value = cvv;
+            document.getElementById('cardHolder').value = 'John Doe';
+            state.cardType = type;
+
+            // Switch to form tab
+            document.querySelector('[data-tab="3ds2-form"]').click();
+            showStatus('info', 'Test Card Selected', `Card ending in ${number.slice(-4)} (${type})`);
+        }
+
+        // API calls
+        async function checkEnrollment(formData) {
+            updateStep(1);
+            showStatus('info', 'Step 1: Checking Enrollment', 'Verifying card enrollment in 3DS2...');
+
+            const response = await fetch('/php/api/check-enrollment.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    card_number: formData.cardNumber,
+                    exp_date: formData.expDate,
+                    card_holder: formData.cardHolder,
+                    card_type: state.cardType,
+                    order_id: state.orderId,
+                    amount: formData.amount,
+                    currency: formData.currency,
+                    demo_mode: state.demoMode
+                })
+            });
+
+            const result = await response.json();
+            logResponse('Check Enrollment', result);
+
+            if (!result.success) {
+                throw new Error(result.message || 'Enrollment check failed');
+            }
+
+            state.orderId = result.data.order_id;
+            state.serverTransId = result.data.server_trans_id;
+
+            showStatus('success', 'Enrollment Complete',
+                `Card is ${result.data.enrolled === 'Y' ? 'enrolled' : 'not enrolled'} in 3DS2`);
+
+            return result.data;
+        }
+
+        async function processMethodUrl(methodUrl) {
+            if (!methodUrl) {
+                updateStep(2, 'completed');
+                return true;
+            }
+            updateStep(2);
+            showStatus('info', 'Step 2: Device Fingerprinting', 'Processing Method URL...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            updateStep(2, 'completed');
+            return true;
+        }
+
+        async function initiateAuthentication(formData) {
+            updateStep(3);
+            showStatus('info', 'Step 3: Initiating Authentication', 'Sending authentication request...');
+
+            const isChallengeCard = challengeCards.includes(formData.cardNumber);
+            const response = await fetch('/php/api/initiate-auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    card_number: formData.cardNumber,
+                    amount: formData.amount,
+                    currency: formData.currency,
+                    exp_date: formData.expDate,
+                    card_holder: formData.cardHolder,
+                    card_type: state.cardType,
+                    order_id: state.orderId,
+                    server_trans_id: state.serverTransId,
+                    method_url_complete: 'true',
+                    browser_data: getBrowserData(),
+                    customer: { email: formData.email },
+                    demo_mode: state.demoMode,
+                    challenge_simulation: state.demoMode && isChallengeCard
+                })
+            });
+
+            const result = await response.json();
+            logResponse('Initiate Authentication', result);
+
+            if (!result.success) {
+                throw new Error(result.message || 'Authentication failed');
+            }
+
+            if (result.data.challenge_required) {
+                showStatus('warning', 'Challenge Required', 'Cardholder authentication needed.');
+                return { challengeRequired: true, challengeData: result.data.challenge };
+            } else {
+                updateStep(3, 'completed');
+                updateStep(4, 'completed');
+                showStatus('success', 'Frictionless Authentication', 'Authentication completed without challenge!');
+                return { challengeRequired: false, authData: result.data.auth_data };
+            }
+        }
+
+        async function handleChallenge(challengeData) {
+            updateStep(4);
+
+            const challengeCard = document.getElementById('challengeCard');
+            const challengeFrame = document.getElementById('challengeFrame');
+
+            challengeCard.classList.remove('gp-hidden');
+            challengeCard.scrollIntoView({ behavior: 'smooth' });
+
+            // In demo mode, simulate the challenge with a visual demo
+            if (state.demoMode) {
+                showStatus('info', 'Step 4: Demo Challenge', 'Simulating cardholder authentication...');
+
+                // Show demo challenge in iframe
+                challengeFrame.srcdoc = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body { font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100%; margin: 0; background: #f8f9fa; }
+                            .demo-challenge { text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; }
+                            h2 { color: #00263e; margin-bottom: 1rem; }
+                            p { color: #666; margin-bottom: 1.5rem; }
+                            .spinner { width: 40px; height: 40px; border: 3px solid #e0e0e0; border-top-color: #00263e; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+                            @keyframes spin { to { transform: rotate(360deg); } }
+                            .progress { background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 1rem; }
+                            .progress-bar { background: #00a651; height: 100%; width: 0; animation: progress 2s ease-out forwards; }
+                            @keyframes progress { to { width: 100%; } }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="demo-challenge">
+                            <div class="spinner"></div>
+                            <h2>Demo Challenge</h2>
+                            <p>Simulating cardholder authentication verification...</p>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                // Auto-complete after 2.5 seconds
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        challengeCard.classList.add('gp-hidden');
+                        updateStep(4, 'completed');
+                        showStatus('success', 'Demo Challenge Complete', 'Cardholder authenticated successfully (simulated)');
+                        resolve({
+                            eci: '05',
+                            cavv: 'AAABBZIhcQAAAABvllEIRoEoAAA=',
+                            xid: btoa('demo-' + Date.now()),
+                            ds_trans_id: 'demo-ds-' + Date.now()
+                        });
+                    }, 2500);
+                });
+            }
+
+            // Real challenge flow
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = challengeData.acs_url;
+            form.target = 'challengeFrame';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'creq';
+            input.value = challengeData.creq;
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+
+            showStatus('info', 'Step 4: Challenge in Progress', 'Please complete the authentication.');
+
+            return new Promise((resolve) => {
+                window.addEventListener('message', function handler(event) {
+                    if (event.data.type === 'challenge_complete') {
+                        window.removeEventListener('message', handler);
+                        challengeCard.classList.add('gp-hidden');
+                        updateStep(4, 'completed');
+                        resolve(event.data.cres);
+                    }
+                });
+            });
+        }
+
+        async function authorizePayment(authData, formData) {
+            updateStep(5);
+            showStatus('info', 'Step 5: Authorizing Payment', 'Processing payment...');
+
+            const response = await fetch('/php/api/authorize-payment.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    card_number: formData.cardNumber,
+                    amount: formData.amount,
+                    currency: formData.currency,
+                    exp_date: formData.expDate,
+                    card_holder: formData.cardHolder,
+                    card_type: state.cardType,
+                    cvv: formData.cvv,
+                    order_id: state.orderId,
+                    auth_data: authData,
+                    demo_mode: state.demoMode
+                })
+            });
+
+            const result = await response.json();
+            logResponse('Authorize Payment', result);
+
+            if (!result.success) {
+                throw new Error(result.message || 'Payment failed');
+            }
+
+            updateStep(5, 'completed');
+            showStatus('success', 'Payment Successful',
+                `Transaction ID: ${result.data.transaction_id}`);
+
+            return result;
+        }
+
+        // Form submission
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="gp-spinner"></span> Processing...';
+
+            state.orderId = 'order-' + Date.now();
+            state.responses = [];
+
+            const formData = {
+                cardNumber: document.getElementById('cardNumber').value.replace(/\s/g, ''),
+                expDate: document.getElementById('expDate').value,
+                cvv: document.getElementById('cvv').value,
+                cardHolder: document.getElementById('cardHolder').value,
+                amount: document.getElementById('amount').value,
+                currency: document.getElementById('currency').value,
+                email: document.getElementById('email').value
+            };
+
+            try {
+                const enrollment = await checkEnrollment(formData);
+                await processMethodUrl(enrollment.method_url);
+                const authResult = await initiateAuthentication(formData);
+
+                let finalAuthData;
+                if (authResult.challengeRequired) {
+                    finalAuthData = await handleChallenge(authResult.challengeData);
+                } else {
+                    finalAuthData = authResult.authData;
+                }
+
+                await authorizePayment(finalAuthData, formData);
+
+            } catch (error) {
+                showStatus('error', 'Error', error.message);
+                console.error('Payment flow error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Start 3DS2 Authentication';
+            }
+        });
+    </script>
 </body>
 </html>

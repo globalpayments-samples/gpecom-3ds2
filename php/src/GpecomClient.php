@@ -49,9 +49,10 @@ class GpecomClient
         $this->debug = $debug;
 
         // Set API endpoint based on environment
+        // Global Payments Realex XML API endpoints
         $this->apiUrl = $sandbox
-            ? 'https://api.sandbox.globalpay-ecommerce.com/xml'
-            : 'https://api.globalpay-ecommerce.com/xml';
+            ? 'https://api.sandbox.realexpayments.com/epage-remote.cgi'
+            : 'https://api.realexpayments.com/epage-remote.cgi';
     }
 
     /**
@@ -135,6 +136,7 @@ class GpecomClient
     private function sendRequest(string $xmlRequest): string
     {
         if ($this->debug) {
+            error_log("GPeCOM Request URL: " . $this->apiUrl);
             error_log("GPeCOM Request:\n" . $this->formatXml($xmlRequest));
         }
 
@@ -149,24 +151,35 @@ class GpecomClient
                 'Content-Length: ' . strlen($xmlRequest)
             ],
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_TIMEOUT => 30
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => true
         ]);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
+        $errno = curl_errno($ch);
         curl_close($ch);
 
-        if ($error) {
-            throw new Exception("CURL Error: {$error}");
+        if ($errno) {
+            throw new Exception("CURL Error ({$errno}): {$error} - URL: {$this->apiUrl}");
         }
 
         if ($httpCode !== 200) {
-            throw new Exception("HTTP Error: {$httpCode}");
+            $errorMsg = "HTTP Error: {$httpCode} - URL: {$this->apiUrl}";
+            if ($response) {
+                $errorMsg .= " - Response: " . substr($response, 0, 500);
+            }
+            throw new Exception($errorMsg);
+        }
+
+        if (empty($response)) {
+            throw new Exception("Empty response from API - URL: {$this->apiUrl}");
         }
 
         if ($this->debug) {
-            error_log("GPeCOM Response:\n" . $this->formatXml($response));
+            error_log("GPeCOM Response (HTTP {$httpCode}):\n" . $this->formatXml($response));
         }
 
         return $response;
@@ -244,13 +257,15 @@ class GpecomClient
         $expDate = $options['exp_date'] ?? '1225';
         $cardHolder = $options['card_holder'] ?? 'John Doe';
         $cardType = $options['card_type'] ?? 'VISA';
+        $amount = $options['amount'] ?? '1000';
+        $currency = $options['currency'] ?? 'USD';
 
         $hash = $this->generateHash(
             $timestamp,
             $this->merchantId,
             $orderId,
-            '',
-            '',
+            $amount,
+            $currency,
             $cardNumber
         );
 
@@ -260,6 +275,7 @@ class GpecomClient
     <merchantid>{$this->merchantId}</merchantid>
     <account>{$account}</account>
     <orderid>{$orderId}</orderid>
+    <amount currency="{$currency}">{$amount}</amount>
     <card>
         <number>{$cardNumber}</number>
         <expdate>{$expDate}</expdate>
