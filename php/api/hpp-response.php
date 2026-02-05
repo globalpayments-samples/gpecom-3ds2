@@ -122,14 +122,14 @@ try {
         </div>
 
         <script>
-            // Send result back to parent window
+            // Send result back to parent window (for embedded/lightbox mode)
             if (window.parent !== window) {
                 window.parent.postMessage({
-                    type: 'hpp_response',
-                    success: <?= $success ? 'true' : 'false' ?>,
-                    orderId: '<?= htmlspecialchars($orderId) ?>',
-                    responseCode: '<?= htmlspecialchars($responseCode) ?>',
-                    message: '<?= htmlspecialchars($responseMessage) ?>'
+                    RESULT: '<?= htmlspecialchars($responseCode) ?>',
+                    ORDER_ID: '<?= htmlspecialchars($orderId) ?>',
+                    MESSAGE: '<?= htmlspecialchars($responseMessage) ?>',
+                    AUTHCODE: '<?= htmlspecialchars($responseValues['AUTHCODE'] ?? '') ?>',
+                    PASREF: '<?= htmlspecialchars($responseValues['PASREF'] ?? '') ?>'
                 }, '*');
             }
         </script>
