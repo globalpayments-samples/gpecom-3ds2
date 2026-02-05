@@ -53,6 +53,9 @@ try {
         }
     }
 
+    // Get account from environment (must be configured for 3DS2/MPI)
+    $account = $_ENV['GPECOM_ACCOUNT'] ?? 'internet';
+
     // Initialize GPeCOM client
     $client = new GpecomClient(
         $_ENV['GPECOM_MERCHANT_ID'],
@@ -62,9 +65,12 @@ try {
         true  // debug mode
     );
 
+    // Configure client with account
+    $client->setAccountId($account);
+
     // Prepare options
     $options = [
-        'account' => $input['account'] ?? 'internet'
+        'account' => $input['account'] ?? $account
     ];
 
     // Verify authentication

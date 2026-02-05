@@ -61,6 +61,9 @@ try {
         }
     }
 
+    // Get account from environment (must be configured for 3DS2/MPI)
+    $account = $_ENV['GPECOM_ACCOUNT'] ?? 'internet';
+
     // Initialize GPeCOM client
     $client = new GpecomClient(
         $_ENV['GPECOM_MERCHANT_ID'],
@@ -70,6 +73,9 @@ try {
         true  // debug mode
     );
 
+    // Configure client with account
+    $client->setAccountId($account);
+
     // Prepare options
     $options = [
         'order_id' => $input['order_id'] ?? uniqid('order-'),
@@ -77,7 +83,7 @@ try {
         'card_holder' => $input['card_holder'] ?? 'John Doe',
         'card_type' => $input['card_type'] ?? 'VISA',
         'cvv' => $input['cvv'] ?? '123',
-        'account' => $input['account'] ?? 'internet'
+        'account' => $input['account'] ?? $account
     ];
 
     // Check if demo mode is enabled

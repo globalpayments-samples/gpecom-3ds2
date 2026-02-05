@@ -50,6 +50,9 @@ try {
         throw new Exception('Card number is required');
     }
 
+    // Get account from environment (must be configured for 3DS2/MPI)
+    $account = $_ENV['GPECOM_ACCOUNT'] ?? 'internet';
+
     // Initialize GPeCOM client
     $client = new GpecomClient(
         $_ENV['GPECOM_MERCHANT_ID'],
@@ -59,13 +62,24 @@ try {
         true  // debug mode
     );
 
+    // Configure client with account and notification URLs
+    $client->setAccountId($account);
+
+    // Set notification URLs (client validates they are HTTPS and not localhost)
+    if (!empty($_ENV['METHOD_NOTIFICATION_URL'])) {
+        $client->setMethodNotificationUrl($_ENV['METHOD_NOTIFICATION_URL']);
+    }
+    if (!empty($_ENV['CHALLENGE_NOTIFICATION_URL'])) {
+        $client->setChallengeNotificationUrl($_ENV['CHALLENGE_NOTIFICATION_URL']);
+    }
+
     // Prepare options
     $options = [
         'order_id' => $input['order_id'] ?? uniqid('order-'),
         'exp_date' => $input['exp_date'] ?? '1225',
         'card_holder' => $input['card_holder'] ?? 'John Doe',
         'card_type' => $input['card_type'] ?? 'VISA',
-        'account' => $input['account'] ?? 'internet',
+        'account' => $input['account'] ?? $account,
         'amount' => $input['amount'] ?? '1000',
         'currency' => $input['currency'] ?? 'USD'
     ];
@@ -101,15 +115,43 @@ try {
     $response = $client->check3DS2Enrollment($input['card_number'], $options);
 
     // Check if request was successful
-    if ($response['result'] !== '00') {
-        // Check for MPI not configured error
-        if ($response['result'] === '503' && stripos($response['message'], 'mpi') !== false) {
+    // Valid result codes: '00' = success, '110' = not enrolled but can proceed
+    $validCodes = ['00', '110'];
+
+    if (!in_array($response['result'], $validCodes)) {
+        // Detect MPI/3DS2 configuration errors (multiple possible patterns)
+        $isMpiError = false;
+        $resultCode = $response['result'];
+        $message = strtolower($response['message'] ?? '');
+
+        // Check for various MPI-related error indicators
+        if (
+            // Result code 503 with MPI mention
+            ($resultCode === '503' && stripos($message, 'mpi') !== false) ||
+            // Result code 508 (service not configured)
+            $resultCode === '508' ||
+            // Result code 520 (no response from MPI)
+            $resultCode === '520' ||
+            // Message contains MPI-related terms
+            stripos($message, 'mpi') !== false ||
+            stripos($message, '3ds') !== false ||
+            stripos($message, '3d secure') !== false ||
+            stripos($message, 'not configured') !== false ||
+            stripos($message, 'service not available') !== false ||
+            // Account-related errors
+            (stripos($message, 'account') !== false && stripos($message, 'invalid') !== false)
+        ) {
+            $isMpiError = true;
+        }
+
+        if ($isMpiError) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
                 'error' => '3DS2 not configured',
                 'message' => 'Your Global Payments account does not have 3D Secure 2 (MPI) enabled. Please contact Global Payments support to enable 3DS2 on your sandbox account, or enable Demo Mode for UI testing.',
-                'hint' => 'Click "Enable Demo Mode" above the form to test the UI flow.',
+                'hint' => 'Click "Enable Demo Mode" above the form to test the UI flow. Also verify your GPECOM_ACCOUNT setting in .env matches an account with MPI enabled.',
+                'account_used' => $options['account'],
                 'details' => $response
             ]);
             exit;
@@ -119,7 +161,9 @@ try {
         echo json_encode([
             'success' => false,
             'error' => 'Enrollment check failed',
-            'message' => $response['message'],
+            'message' => $response['message'] ?? 'Unknown error',
+            'result_code' => $resultCode,
+            'account_used' => $options['account'],
             'details' => $response
         ]);
         exit;

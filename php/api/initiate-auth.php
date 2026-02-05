@@ -53,6 +53,9 @@ try {
         }
     }
 
+    // Get account from environment (must be configured for 3DS2/MPI)
+    $account = $_ENV['GPECOM_ACCOUNT'] ?? 'internet';
+
     // Initialize GPeCOM client
     $client = new GpecomClient(
         $_ENV['GPECOM_MERCHANT_ID'],
@@ -62,13 +65,24 @@ try {
         true  // debug mode
     );
 
+    // Configure client with account and notification URLs
+    $client->setAccountId($account);
+
+    // Set notification URLs (client validates they are HTTPS and not localhost)
+    if (!empty($_ENV['METHOD_NOTIFICATION_URL'])) {
+        $client->setMethodNotificationUrl($_ENV['METHOD_NOTIFICATION_URL']);
+    }
+    if (!empty($_ENV['CHALLENGE_NOTIFICATION_URL'])) {
+        $client->setChallengeNotificationUrl($_ENV['CHALLENGE_NOTIFICATION_URL']);
+    }
+
     // Prepare options
     $options = [
         'order_id' => $input['order_id'] ?? uniqid('order-'),
         'exp_date' => $input['exp_date'] ?? '1225',
         'card_holder' => $input['card_holder'] ?? 'John Doe',
         'card_type' => $input['card_type'] ?? 'VISA',
-        'account' => $input['account'] ?? 'internet',
+        'account' => $input['account'] ?? $account,
         'server_trans_id' => $input['server_trans_id'] ?? '',
         'method_url_complete' => $input['method_url_complete'] ?? 'false'
     ];
