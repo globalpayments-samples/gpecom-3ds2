@@ -3,55 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Payments - Checkout</title>
+    <title>Global Payments - HPP Checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://globalpayments-samples.github.io/css/styles.css">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
+        /* HPP-specific styles */
+        .hpp-page {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
         }
-        .checkout-container {
+        .hpp-container {
             width: 100%;
             max-width: 500px;
         }
-        .order-summary {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .order-summary h2 {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-        .order-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-        }
-        .order-total {
-            border-top: 1px solid #eee;
-            margin-top: 0.5rem;
-            padding-top: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* HPP iframe container */
         #hppContainer {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             overflow: hidden;
             min-height: 500px;
         }
@@ -60,71 +30,92 @@
             height: 500px;
             border: none;
         }
-
-        .loading {
+        .hpp-loading {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 400px;
-            color: #666;
+            color: var(--gp-color-text-secondary, #666);
         }
-        .spinner {
+        .hpp-spinner {
             width: 40px;
             height: 40px;
             border: 3px solid #e0e0e0;
-            border-top-color: #00263e;
+            border-top-color: #262AFF;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: hpp-spin 1s linear infinite;
             margin-bottom: 1rem;
         }
-        @keyframes spin {
+        @keyframes hpp-spin {
             to { transform: rotate(360deg); }
-        }
-        .error {
-            padding: 2rem;
-            text-align: center;
-            color: #721c24;
-            background: #f8d7da;
-            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="checkout-container">
-        <!-- Order Summary -->
-        <div class="order-summary">
-            <h2>Order Summary</h2>
-            <div class="order-row">
-                <span>Product</span>
-                <span>Test Item</span>
-            </div>
-            <div class="order-row order-total">
-                <span>Total</span>
-                <span id="totalAmount">EUR 19.99</span>
+    <!-- Header -->
+    <header class="gp-header">
+        <div class="gp-container">
+            <div class="gp-header-content">
+                <div class="gp-logo">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="https://globalpayments-samples.github.io/assets/img/GP_logo.svg">
+                        <img src="https://globalpayments-samples.github.io/assets/img/GP_favicon.svg" alt="Global Payments" style="height: 32px; width: auto;">
+                    </picture>
+                </div>
+                <nav class="gp-header-nav">
+                    <a href="../">3DS2 Testing</a>
+                    <a href="https://developer.globalpay.com/">Documentation</a>
+                </nav>
             </div>
         </div>
+    </header>
 
-        <!-- HPP Embedded Container -->
-        <div id="hppContainer">
-            <div class="loading" id="loadingIndicator">
-                <div class="spinner"></div>
-                <p>Loading secure payment form...</p>
+    <div class="hpp-page">
+        <div class="hpp-container">
+            <!-- Order Summary -->
+            <div class="gp-card" style="margin-bottom: 1rem;">
+                <div class="gp-card-header">
+                    <h2 class="gp-card-title">Order Summary</h2>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                    <span>Product</span>
+                    <span>Test Item</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid #eee; margin-top: 0.5rem; font-weight: 600;">
+                    <span>Total</span>
+                    <span id="totalAmount">EUR 19.99</span>
+                </div>
+            </div>
+
+            <!-- HPP Embedded Container -->
+            <div class="gp-card" id="hppContainer">
+                <div class="hpp-loading" id="loadingIndicator">
+                    <div class="hpp-spinner"></div>
+                    <p>Loading secure payment form...</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="gp-footer">
+        <div class="gp-container">
+            <div class="gp-footer-content">
+                <p class="gp-footer-copyright">&copy; 2026 Global Payments. HPP Checkout.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- jQuery and rxp-hpp.js -->
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <script src="https://pay.sandbox.realexpayments.com/pay/js/rxp-hpp.js"></script>
     <script>
         $(document).ready(function() {
-            // Auto-load the HPP on page load
             loadHPP();
         });
 
         function loadHPP() {
-            // Get HPP JSON from server
             $.getJSON("api/hpp-request.php", {
                 amount: "19.99",
                 currency: "EUR",
@@ -138,21 +129,17 @@
                     return;
                 }
 
-                // Hide loading indicator
                 $("#loadingIndicator").hide();
 
-                // Set HPP URL
                 RealexHpp.setHppUrl("https://pay.sandbox.realexpayments.com/pay");
 
-                // Initialize embedded HPP - this loads the Global Payments payment form
                 RealexHpp.embedded.init(
-                    "autoload",           // Auto-load immediately
-                    "hppContainer",       // Container element ID
-                    "api/hpp-response.php", // Response endpoint
-                    hppJson               // HPP JSON from server
+                    "autoload",
+                    "hppContainer",
+                    "api/hpp-response.php",
+                    hppJson
                 );
 
-                // Listen for response
                 window.addEventListener('message', receiveMessage, false);
 
             }).fail(function(jqXHR, textStatus, error) {
@@ -161,7 +148,11 @@
         }
 
         function showError(message) {
-            $("#hppContainer").html('<div class="error"><h3>Error</h3><p>' + message + '</p></div>');
+            $("#hppContainer").html(
+                '<div class="gp-alert gp-alert-error" style="margin: 2rem;">' +
+                '<strong>Error</strong><br>' + message +
+                '</div>'
+            );
         }
 
         function receiveMessage(event) {
@@ -178,20 +169,20 @@
                 console.log("Payment Response:", response);
 
                 if (response.RESULT === '00') {
-                    $("#hppContainer").html(`
-                        <div style="padding: 2rem; text-align: center; background: #d4edda; color: #155724;">
-                            <h3>Payment Successful!</h3>
-                            <p>Order ID: ${response.ORDER_ID || 'N/A'}</p>
-                            <p>Auth Code: ${response.AUTHCODE || 'N/A'}</p>
-                        </div>
-                    `);
+                    $("#hppContainer").html(
+                        '<div class="gp-alert gp-alert-success" style="margin: 2rem; text-align: center;">' +
+                        '<strong>Payment Successful!</strong><br>' +
+                        'Order ID: ' + (response.ORDER_ID || 'N/A') + '<br>' +
+                        'Auth Code: ' + (response.AUTHCODE || 'N/A') +
+                        '</div>'
+                    );
                 } else {
-                    $("#hppContainer").html(`
-                        <div style="padding: 2rem; text-align: center; background: #f8d7da; color: #721c24;">
-                            <h3>Payment Failed</h3>
-                            <p>${response.MESSAGE || 'An error occurred'}</p>
-                        </div>
-                    `);
+                    $("#hppContainer").html(
+                        '<div class="gp-alert gp-alert-error" style="margin: 2rem; text-align: center;">' +
+                        '<strong>Payment Failed</strong><br>' +
+                        (response.MESSAGE || 'An error occurred') +
+                        '</div>'
+                    );
                 }
             }
         }

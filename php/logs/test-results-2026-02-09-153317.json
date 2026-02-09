@@ -1,0 +1,308 @@
+[
+    {
+        "card_number": "4222000006285344",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_SUCCESSFUL",
+        "expected_eci": "05",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "1bcef9b8-6c34-481f-bcde-b7d44eb3a886",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "05",
+            "cavv": "present",
+            "ds_trans_id": "deb1053d-94d8-43c7-b69c-ce9c77d28ca5"
+        },
+        "status": "AUTHENTICATION_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "4222000009719489",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_SUCCESSFUL",
+        "expected_eci": "05",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "aa64ba6d-8e2f-447f-80a5-958823a2f602",
+            "method_url": "none",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "05",
+            "cavv": "present",
+            "ds_trans_id": "f1f66810-c96e-4bac-be5a-0e4916427048"
+        },
+        "status": "AUTHENTICATION_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "4222000005218627",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_ATTEMPTED",
+        "expected_eci": "06",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "187ba2c8-5d70-433f-ae78-2de6655cbf11",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_ATTEMPTED_BUT_NOT_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "06",
+            "cavv": "present",
+            "ds_trans_id": "61b0d4bd-54dc-40f3-9e03-a3449143a476"
+        },
+        "status": "AUTHENTICATION_ATTEMPTED_BUT_NOT_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "4222000002144131",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_FAILED",
+        "expected_eci": "07",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "bdffb8d7-a669-4f03-91cc-706e823cd159",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_FAILED",
+            "challenge_required": false,
+            "eci": "07",
+            "cavv": "none",
+            "ds_trans_id": "8212310f-bb01-4d12-9b4f-52c1eb458260"
+        },
+        "status": "AUTHENTICATION_FAILED",
+        "pass": true
+    },
+    {
+        "card_number": "4222000007275799",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_ISSUER_REJECTED",
+        "expected_eci": "07",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "b98de0fd-bf3f-4a7d-8d3b-b5c098500aa9",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_ISSUER_REJECTED",
+            "challenge_required": false,
+            "eci": "07",
+            "cavv": "none",
+            "ds_trans_id": "dca083a4-a43b-4a2d-bc32-6220532e5f67"
+        },
+        "status": "AUTHENTICATION_ISSUER_REJECTED",
+        "pass": true
+    },
+    {
+        "card_number": "4222000008880910",
+        "brand": "VISA",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+        "expected_eci": "07",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "7f51d508-7293-4baf-a2a7-1e327be687bb",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+            "challenge_required": false,
+            "eci": "07",
+            "cavv": "none",
+            "ds_trans_id": "3665777f-3d2e-4d07-b8b2-ed5ba3af4c1b"
+        },
+        "status": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+        "pass": true
+    },
+    {
+        "card_number": "4222000001227408",
+        "brand": "VISA",
+        "expected_flow": "challenge",
+        "expected_result": "CHALLENGE_REQUIRED",
+        "expected_eci": null,
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "eca97361-8b90-49cf-a68f-79ad10479c1c",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "CHALLENGE_REQUIRED",
+            "challenge_required": true,
+            "acs_url": "https:\/\/acs2p.test.gpe.cz\/tds\/challenge\/brw\/a3c41540-05cc-41f1-9146-256f69a391b1",
+            "has_creq": true
+        },
+        "status": "CHALLENGE_REQUIRED",
+        "pass": true
+    },
+    {
+        "card_number": "5354560000000004",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_SUCCESSFUL",
+        "expected_eci": "02",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "65786c9a-d146-4c6e-9b25-364b9d78ddef",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "02",
+            "cavv": "present",
+            "ds_trans_id": "a5c013a1-40fc-4bc2-8e53-10e3eb3f0504"
+        },
+        "status": "AUTHENTICATION_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "5571596304025153",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_SUCCESSFUL",
+        "expected_eci": "02",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "b6f2b642-f6e8-4bed-a7c3-654b176974ea",
+            "method_url": "none",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "02",
+            "cavv": "present",
+            "ds_trans_id": "fbb9b04b-be0d-4783-b23d-f38342a8986e"
+        },
+        "status": "AUTHENTICATION_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "5580364874958322",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_ATTEMPTED",
+        "expected_eci": "01",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "0409b24f-3225-436e-bed8-168f9ce48d00",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_ATTEMPTED_BUT_NOT_SUCCESSFUL",
+            "challenge_required": false,
+            "eci": "01",
+            "cavv": "present",
+            "ds_trans_id": "ca37481f-1679-485c-be1f-9524aba6b115"
+        },
+        "status": "AUTHENTICATION_ATTEMPTED_BUT_NOT_SUCCESSFUL",
+        "pass": true
+    },
+    {
+        "card_number": "5540010585397800",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_FAILED",
+        "expected_eci": "00",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "427b4087-a3dd-475e-8957-eaa11dd1d697",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_FAILED",
+            "challenge_required": false,
+            "eci": "00",
+            "cavv": "none",
+            "ds_trans_id": "bf4fefe5-bd0f-4938-ae56-9dc794384c24"
+        },
+        "status": "AUTHENTICATION_FAILED",
+        "pass": true
+    },
+    {
+        "card_number": "5588312194362669",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_ISSUER_REJECTED",
+        "expected_eci": "00",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "a1d43862-0289-4028-aff0-4c907affc393",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_ISSUER_REJECTED",
+            "challenge_required": false,
+            "eci": "00",
+            "cavv": "none",
+            "ds_trans_id": "7b5ac17f-79d3-42dd-a3e9-bfdf1f893636"
+        },
+        "status": "AUTHENTICATION_ISSUER_REJECTED",
+        "pass": true
+    },
+    {
+        "card_number": "5520680211891022",
+        "brand": "MC",
+        "expected_flow": "frictionless",
+        "expected_result": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+        "expected_eci": "00",
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "db2b3e5d-1011-4027-881b-5489699ccc16",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+            "challenge_required": false,
+            "eci": "00",
+            "cavv": "none",
+            "ds_trans_id": "8fa08b3d-a38c-463d-bc16-22a3fa298713"
+        },
+        "status": "AUTHENTICATION_COULD_NOT_BE_PERFORMED",
+        "pass": true
+    },
+    {
+        "card_number": "5506874496684651",
+        "brand": "MC",
+        "expected_flow": "challenge",
+        "expected_result": "CHALLENGE_REQUIRED",
+        "expected_eci": null,
+        "enrollment": {
+            "enrolled": "Y",
+            "server_trans_id": "57953544-e354-48cc-9d48-a2adabc503a1",
+            "method_url": "present",
+            "acs_end_version": "2.2.0"
+        },
+        "authentication": {
+            "status": "CHALLENGE_REQUIRED",
+            "challenge_required": true,
+            "acs_url": "https:\/\/api.sandbox.globalpay-ecommerce.com\/acs-simulator\/challenge?A=aHR0cHM6Ly9kZXZlbG9wZXIuZ2xvYmFscGF5bWVudHMuY29tLzNkczIvY2hhbGxlbmdlLW5vdGlmaWNhdGlvbg==&B=c0bddf05-83aa-415a-a997-b51fc5a3031a&C=19,99&D=20260209153317&E=978&F=Merchant&G=5xxxxxxxxxxx4651",
+            "has_creq": true
+        },
+        "status": "CHALLENGE_REQUIRED",
+        "pass": true
+    }
+]

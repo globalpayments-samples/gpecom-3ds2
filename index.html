@@ -289,13 +289,13 @@
                     <form id="paymentForm" class="gp-form">
                         <div class="gp-form-group">
                             <label for="cardNumber" class="gp-label">Card Number:</label>
-                            <input type="text" id="cardNumber" name="cardNumber" class="gp-input" placeholder="4263970000005262" maxlength="19" required>
+                            <input type="text" id="cardNumber" name="cardNumber" class="gp-input" placeholder="4222000006285344" maxlength="19" required>
                         </div>
 
                         <div class="gp-form-row">
                             <div class="gp-form-group">
                                 <label for="expDate" class="gp-label">Expiry (MMYY):</label>
-                                <input type="text" id="expDate" name="expDate" class="gp-input" placeholder="1225" maxlength="4" required>
+                                <input type="text" id="expDate" name="expDate" class="gp-input" placeholder="1228" maxlength="4" required>
                             </div>
                             <div class="gp-form-group">
                                 <label for="cvv" class="gp-label">CVV:</label>
@@ -355,48 +355,79 @@
                         </p>
                     </div>
 
-                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Visa</h3>
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Visa (Message Version 2.2)</h3>
                     <div class="gp-test-cards">
-                        <div class="gp-test-card" onclick="fillTestCard('4263970000005262', 'VISA')">
-                            <div class="gp-test-card-number">4263970000005262</div>
-                            <div class="gp-test-card-desc">Frictionless Success</div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000006285344', 'VISA')">
+                            <div class="gp-test-card-number">4222000006285344</div>
+                            <div class="gp-test-card-desc">Frictionless Success (ECI 05)</div>
                         </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4012001037461114', 'VISA')">
-                            <div class="gp-test-card-number">4012001037461114</div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000009719489', 'VISA')">
+                            <div class="gp-test-card-number">4222000009719489</div>
+                            <div class="gp-test-card-desc">Frictionless Success - No Method URL (ECI 05)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000005218627', 'VISA')">
+                            <div class="gp-test-card-number">4222000005218627</div>
+                            <div class="gp-test-card-desc">Attempted (ECI 06)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000002144131', 'VISA')">
+                            <div class="gp-test-card-number">4222000002144131</div>
+                            <div class="gp-test-card-desc">Authentication Failed (ECI 07)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000007275799', 'VISA')">
+                            <div class="gp-test-card-number">4222000007275799</div>
+                            <div class="gp-test-card-desc">Issuer Rejected (ECI 07)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000008880910', 'VISA')">
+                            <div class="gp-test-card-number">4222000008880910</div>
+                            <div class="gp-test-card-desc">Could Not Be Performed (ECI 07)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('4222000001227408', 'VISA')">
+                            <div class="gp-test-card-number">4222000001227408</div>
                             <div class="gp-test-card-desc">Challenge Required</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4012001036853337', 'VISA')">
-                            <div class="gp-test-card-number">4012001036853337</div>
-                            <div class="gp-test-card-desc">Authentication Failed</div>
                         </div>
                     </div>
 
-                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">Mastercard</h3>
+                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">Mastercard (Message Version 2.2)</h3>
                     <div class="gp-test-cards">
-                        <div class="gp-test-card" onclick="fillTestCard('5425230000004415', 'MC')">
-                            <div class="gp-test-card-number">5425230000004415</div>
-                            <div class="gp-test-card-desc">Frictionless Success</div>
+                        <div class="gp-test-card" onclick="fillTestCard('5354560000000004', 'MC')">
+                            <div class="gp-test-card-number">5354560000000004</div>
+                            <div class="gp-test-card-desc">Frictionless Success (ECI 02)</div>
                         </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5425230000004407', 'MC')">
-                            <div class="gp-test-card-number">5425230000004407</div>
+                        <div class="gp-test-card" onclick="fillTestCard('5571596304025153', 'MC')">
+                            <div class="gp-test-card-number">5571596304025153</div>
+                            <div class="gp-test-card-desc">Frictionless Success - No Method URL (ECI 02)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5580364874958322', 'MC')">
+                            <div class="gp-test-card-number">5580364874958322</div>
+                            <div class="gp-test-card-desc">Attempted (ECI 01)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5540010585397800', 'MC')">
+                            <div class="gp-test-card-number">5540010585397800</div>
+                            <div class="gp-test-card-desc">Authentication Failed (ECI 00)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5588312194362669', 'MC')">
+                            <div class="gp-test-card-number">5588312194362669</div>
+                            <div class="gp-test-card-desc">Issuer Rejected (ECI 00)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5520680211891022', 'MC')">
+                            <div class="gp-test-card-number">5520680211891022</div>
+                            <div class="gp-test-card-desc">Could Not Be Performed (ECI 00)</div>
+                        </div>
+                        <div class="gp-test-card" onclick="fillTestCard('5506874496684651', 'MC')">
+                            <div class="gp-test-card-number">5506874496684651</div>
                             <div class="gp-test-card-desc">Challenge Required</div>
-                        </div>
-                    </div>
-
-                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">American Express</h3>
-                    <div class="gp-test-cards">
-                        <div class="gp-test-card" onclick="fillTestCard('374101000000608', 'AMEX', '1234')">
-                            <div class="gp-test-card-number">374101000000608</div>
-                            <div class="gp-test-card-desc">Frictionless Success</div>
                         </div>
                     </div>
 
                     <div class="gp-alert gp-alert-info" style="margin-top: 1.5rem;">
-                        <strong>Info:</strong> Frictionless cards authenticate without additional user interaction. Challenge cards require the cardholder to complete an authentication step.
+                        <strong>3DS2 Message Version 2.2 Test Cards</strong><br>
+                        These are the official test cards from Global Payments documentation. Use any future-dated expiry and any CVV.
+                        <br><br>
+                        <strong>ECI Values:</strong> Visa: 05 (success), 06 (attempted), 07 (failed) | Mastercard: 02 (success), 01 (attempted), 00 (failed)
                     </div>
 
                     <div class="gp-alert gp-alert-warning" style="margin-top: 1rem;">
-                        <strong>Demo Mode:</strong> When Demo Mode is enabled, "Challenge Required" cards (4012001037461114, 5425230000004407) will simulate the challenge flow.
+                        <strong>Demo Mode:</strong> When Demo Mode is enabled, Challenge cards (4222000001227408, 5506874496684651) will simulate the challenge flow. Failed authentication cards will return appropriate error responses.
                     </div>
                 </div>
             </div>
@@ -427,7 +458,7 @@
             <div class="gp-footer-content">
                 <div class="gp-footer-section">
                     <p class="gp-footer-copyright">
-                        &copy; 2024 Global Payments. GPeCOM 3DS2 Testing Environment.
+                        &copy; 2026 Global Payments. GPeCOM 3DS2 Testing Environment.
                     </p>
                 </div>
                 <div class="gp-footer-section">
@@ -450,8 +481,8 @@
             demoMode: false
         };
 
-        // Challenge cards (for demo mode simulation)
-        const challengeCards = ['4012001037461114', '5425230000004407'];
+        // Challenge cards (for demo mode simulation) - Message Version 2.2
+        const challengeCards = ['4222000001227408', '5506874496684651'];
 
         // Demo mode toggle
         document.getElementById('demoMode').addEventListener('change', (e) => {
@@ -560,7 +591,7 @@
         // Fill test card
         function fillTestCard(number, type, cvv = '123') {
             document.getElementById('cardNumber').value = number;
-            document.getElementById('expDate').value = '1225';
+            document.getElementById('expDate').value = '1228';
             document.getElementById('cvv').value = cvv;
             document.getElementById('cardHolder').value = 'John Doe';
             state.cardType = type;
@@ -748,6 +779,32 @@
             });
         }
 
+        async function verifyAuthentication(challengeData, formData) {
+            showStatus('info', 'Verifying Authentication', 'Confirming challenge result...');
+
+            const response = await fetch('/php/api/verify-auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    server_trans_id: state.serverTransId,
+                    order_id: state.orderId,
+                    amount: formData.amount,
+                    currency: formData.currency,
+                    cres: challengeData,
+                    demo_mode: state.demoMode
+                })
+            });
+
+            const result = await response.json();
+            logResponse('Verify Authentication', result);
+
+            if (!result.success) {
+                throw new Error(result.message || 'Authentication verification failed');
+            }
+
+            return result.data.auth_data;
+        }
+
         async function authorizePayment(authData, formData) {
             updateStep(5);
             showStatus('info', 'Step 5: Authorizing Payment', 'Processing payment...');
@@ -811,7 +868,9 @@
 
                 let finalAuthData;
                 if (authResult.challengeRequired) {
-                    finalAuthData = await handleChallenge(authResult.challengeData);
+                    const challengeResult = await handleChallenge(authResult.challengeData);
+                    // Verify authentication after challenge
+                    finalAuthData = await verifyAuthentication(challengeResult, formData);
                 } else {
                     finalAuthData = authResult.authData;
                 }
