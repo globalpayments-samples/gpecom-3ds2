@@ -272,17 +272,33 @@
                         </p>
                     </div>
 
-                    <!-- Demo Mode Toggle -->
-                    <div class="gp-alert gp-alert-warning" style="margin-bottom: 1.5rem;">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <strong>Demo Mode</strong>
-                                <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Enable to test UI flow without actual API calls (use when 3DS2 is not configured on your account)</p>
+                    <!-- Backend & Demo Mode Controls -->
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <div class="gp-alert gp-alert-info" style="flex: 1; min-width: 200px; margin: 0;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <strong>Backend</strong>
+                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Select the server-side language to use</p>
+                                </div>
+                                <select id="backendSelector" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; cursor: pointer;">
+                                    <option value="php">PHP</option>
+                                    <option value="nodejs">Node.js</option>
+                                    <option value="dotnet">.NET</option>
+                                    <option value="java">Java</option>
+                                </select>
                             </div>
-                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                <input type="checkbox" id="demoMode" style="width: 20px; height: 20px; margin-right: 8px;">
-                                <span id="demoModeLabel">Off</span>
-                            </label>
+                        </div>
+                        <div class="gp-alert gp-alert-warning" style="flex: 1; min-width: 200px; margin: 0;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <strong>Demo Mode</strong>
+                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Test UI flow without actual API calls</p>
+                                </div>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="checkbox" id="demoMode" style="width: 20px; height: 20px; margin-right: 8px;">
+                                    <span id="demoModeLabel">Off</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -472,13 +488,27 @@
     </footer>
 
     <script>
+        // Backend configuration
+        const backends = {
+            php:    { base: '/php/api', suffix: '.php' },
+            nodejs: { base: '/api', suffix: '' },
+            dotnet: { base: '/api', suffix: '' },
+            java:   { base: '/api', suffix: '' }
+        };
+
+        function getApiUrl(endpoint) {
+            const b = backends[state.backend];
+            return b.base + '/' + endpoint + b.suffix;
+        }
+
         // Application state
         const state = {
             orderId: null,
             serverTransId: null,
             cardType: 'VISA',
             responses: [],
-            demoMode: false
+            demoMode: false,
+            backend: 'php'
         };
 
         // Challenge cards (for demo mode simulation) - Message Version 2.2
@@ -493,6 +523,20 @@
             } else {
                 document.getElementById('statusContainer').innerHTML = '';
             }
+        });
+
+        // Auto-detect backend from server port
+        const portBackendMap = { '8080': 'php', '3001': 'nodejs', '3002': 'dotnet', '3003': 'java' };
+        const detectedBackend = portBackendMap[window.location.port];
+        if (detectedBackend) {
+            state.backend = detectedBackend;
+            document.getElementById('backendSelector').value = detectedBackend;
+        }
+
+        // Backend selector
+        document.getElementById('backendSelector').addEventListener('change', (e) => {
+            state.backend = e.target.value;
+            showStatus('info', 'Backend Changed', 'Using ' + e.target.options[e.target.selectedIndex].text + ' backend');
         });
 
         // Tab switching
@@ -606,7 +650,7 @@
             updateStep(1);
             showStatus('info', 'Step 1: Checking Enrollment', 'Verifying card enrollment in 3DS2...');
 
-            const response = await fetch('/php/api/check-enrollment.php', {
+            const response = await fetch(getApiUrl('check-enrollment'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -654,7 +698,7 @@
             showStatus('info', 'Step 3: Initiating Authentication', 'Sending authentication request...');
 
             const isChallengeCard = challengeCards.includes(formData.cardNumber);
-            const response = await fetch('/php/api/initiate-auth.php', {
+            const response = await fetch(getApiUrl('initiate-auth'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -782,7 +826,7 @@
         async function verifyAuthentication(challengeData, formData) {
             showStatus('info', 'Verifying Authentication', 'Confirming challenge result...');
 
-            const response = await fetch('/php/api/verify-auth.php', {
+            const response = await fetch(getApiUrl('verify-auth'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -809,7 +853,7 @@
             updateStep(5);
             showStatus('info', 'Step 5: Authorizing Payment', 'Processing payment...');
 
-            const response = await fetch('/php/api/authorize-payment.php', {
+            const response = await fetch(getApiUrl('authorize-payment'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

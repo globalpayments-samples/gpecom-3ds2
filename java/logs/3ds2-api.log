@@ -1,0 +1,18 @@
+[2026-02-11 16:51:23] [check-enrollment] [REQUEST] card=535456******0004 order_id=java-test-001
+[2026-02-11 16:51:24] [check-enrollment] [RESPONSE] enrolled=null server_trans_id=a5c7ad5c-73c3-4a34-8d4b-fb56414098b4
+[2026-02-11 16:53:13] [check-enrollment] [REQUEST] card=535456******0004 order_id=java-test-002
+[2026-02-11 16:53:13] [check-enrollment] [RESPONSE] enrolled=true server_trans_id=3ca5b95b-ab8e-4120-8c4c-e340fdbf584a
+[2026-02-11 16:53:21] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 16:53:21] [initiate-auth] [RESPONSE] status=AUTHENTICATION_SUCCESSFUL eci=02
+[2026-02-11 16:53:28] [authorize] [REQUEST] card=535456******0004 amount=19.99 currency=EUR eci=02
+[2026-02-11 16:53:29] [authorize] [RESPONSE] response_code=00 transaction_id=17708288088146147
+[2026-02-11 16:55:37] [check-enrollment] [REQUEST] card=422200******5344 order_id=java-visa-001
+[2026-02-11 16:55:37] [check-enrollment] [RESPONSE] enrolled=true server_trans_id=db230daf-9fac-4120-8ecc-6275fffb68ee
+[2026-02-11 16:55:43] [initiate-auth] [REQUEST] card=422200******5344 amount=25 currency=EUR
+[2026-02-11 16:55:43] [initiate-auth] [RESPONSE] status=AUTHENTICATION_SUCCESSFUL eci=05
+[2026-02-11 16:56:25] [check-enrollment] [REQUEST] card=554001******7800 order_id=java-fail-001
+[2026-02-11 16:56:25] [check-enrollment] [RESPONSE] enrolled=true server_trans_id=72d79bcc-e915-4e25-8181-f96d5e363b58
+[2026-02-11 16:56:25] [check-enrollment] [REQUEST] card=554001******7800 order_id=java-fail-002
+[2026-02-11 16:56:25] [check-enrollment] [RESPONSE] enrolled=true server_trans_id=1bc09bfc-27ef-4465-bdc7-a70ce6cc3bfe
+[2026-02-11 16:56:26] [initiate-auth] [REQUEST] card=554001******7800 amount=15 currency=EUR
+[2026-02-11 16:56:26] [initiate-auth] [RESPONSE] status=AUTHENTICATION_FAILED eci=00

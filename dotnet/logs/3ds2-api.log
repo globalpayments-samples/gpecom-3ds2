@@ -1,0 +1,28 @@
+[2026-02-11 15:09:12] [check-enrollment] [REQUEST] card=535456******0004 order_id=dotnet-test-001
+[2026-02-11 15:09:13] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=2af5d588-01a4-471e-8d4d-de4628fd33eb
+[2026-02-11 15:09:19] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 15:33:54] [check-enrollment] [REQUEST] card=535456******0004 order_id=dotnet-test-002
+[2026-02-11 15:33:54] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=9b86e3f8-75d2-49ef-af74-68b45c77643e
+[2026-02-11 15:34:01] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 15:45:19] [check-enrollment] [REQUEST] card=535456******0004 order_id=dotnet-test-003
+[2026-02-11 15:45:20] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=7fb548d7-c438-4a34-a1e5-a2762ad67ddc
+[2026-02-11 15:45:25] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 15:49:59] [check-enrollment] [REQUEST] card=535456******0004 order_id=dotnet-test-004
+[2026-02-11 15:50:00] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=7df41b2b-1736-4a0e-9ec9-3b2aa184766b
+[2026-02-11 15:50:07] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 16:33:24] [check-enrollment] [REQUEST] card=535456******0004 order_id=dotnet-test-005
+[2026-02-11 16:33:25] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=fd741ee6-ead1-4373-9b07-3b7f2b78328a
+[2026-02-11 16:33:33] [initiate-auth] [REQUEST] card=535456******0004 amount=19.99 currency=EUR
+[2026-02-11 16:33:33] [initiate-auth] [RESPONSE] status=AUTHENTICATION_SUCCESSFUL eci=02
+[2026-02-11 16:33:40] [authorize] [REQUEST] card=535456******0004 amount=19.99 currency=EUR eci=02
+[2026-02-11 16:33:40] [authorize] [RESPONSE] response_code=00 transaction_id=17708276206061821
+[2026-02-11 16:34:45] [check-enrollment] [REQUEST] card=422200******5344 order_id=dotnet-visa-001
+[2026-02-11 16:34:45] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=ab19979a-7e20-4b28-bc6b-d8b791459239
+[2026-02-11 16:36:25] [initiate-auth] [REQUEST] card=422200******5344 amount=25 currency=EUR
+[2026-02-11 16:36:25] [initiate-auth] [RESPONSE] status=AUTHENTICATION_SUCCESSFUL eci=05
+[2026-02-11 16:36:30] [initiate-auth] [REQUEST] card=422200******5344 amount=25 currency=EUR
+[2026-02-11 16:36:30] [initiate-auth] [RESPONSE] status=AUTHENTICATION_SUCCESSFUL eci=05
+[2026-02-11 16:36:44] [check-enrollment] [REQUEST] card=554001******7800 order_id=dotnet-fail-001
+[2026-02-11 16:36:45] [check-enrollment] [RESPONSE] enrolled=True server_trans_id=a382987c-95d7-48ff-a2bc-3ac8bb828b56
+[2026-02-11 16:36:50] [initiate-auth] [REQUEST] card=554001******7800 amount=15 currency=EUR
+[2026-02-11 16:36:50] [initiate-auth] [RESPONSE] status=AUTHENTICATION_FAILED eci=00

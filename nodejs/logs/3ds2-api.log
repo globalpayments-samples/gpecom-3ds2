@@ -1,0 +1,135 @@
+[2026-02-10T17:01:38.748Z] [check-enrollment] [REQUEST] {"card":"535456******0004","order_id":"nodejs-test-001"}
+[2026-02-10T17:14:37.137Z] [check-enrollment] [REQUEST] {"card":"535456******0004","order_id":"nodejs-test-001"}
+[2026-02-10T17:50:20.570Z] [check-enrollment] [REQUEST] {"card":"535456******0004","order_id":"nodejs-test-001"}
+[2026-02-10T17:50:20.572Z] [gp-3ds2-api] [POST protocol-versions] {"request_timestamp":"2026-02-10T17:50:20.571000","merchant_id":"radoslav","account_id":"internet","number":"5354560000000004","scheme":"MASTERCARD"}
+[2026-02-10T17:50:21.130Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "1c52cc55-b1d4-4a84-96a8-af356c97ee4b",
+  "enrolled" : true,
+  "ds_protocol_version_start" : "2.1.0",
+  "ds_protocol_version_end" : "2.2.0",
+  "acs_protocol_version_start" : "2.1.0",
+  "acs_protocol_version_end" : "2.2.0",
+  "method_url" : "https://api.sandbox.globalpay-ecommerce.com/acs-simulator/notify",
+  "acs_info_indicator" : [ "NOT_AVAILABLE" ]
+}
+[2026-02-10T17:50:21.130Z] [check-enrollment] [RESPONSE] {"enrolled":true,"server_trans_id":"1c52cc55-b1d4-4a84-96a8-af356c97ee4b"}
+[2026-02-10T17:50:43.725Z] [initiate-auth] [REQUEST] {"card":"535456******0004","amount":"1000","currency":"EUR","server_trans_id":"1c52cc55-b1d4-4a84-96a8-af356c97ee4b"}
+[2026-02-10T17:50:43.725Z] [gp-3ds2-api] [POST authentications] {"request_timestamp":"2026-02-10T17:50:43.724000","authentication_source":"BROWSER","authentication_request_type":"PAYMENT_TRANSACTION","message_category":"PAYMENT_AUTHENTICATION","message_version":"2.2.0","server_trans_id":"1c52cc55-b1d4-4a84-96a8-af356c97ee4b","merchant_id":"radoslav","account_id":"internet","method_url_completion":"NO","merchant_contact_url":"https://developer.globalpayments.com","card_detail":{"number":"5354560000000004","scheme":"MASTERCARD","expiry_month":"12","expiry_year":"28","full_name":"Test Customer","first_name":"Test","last_name":"Customer"},"order":{"amount":"1000","currency":"EUR","id":"nodejs-test-001","date_time_created":"2026-02-10T17:50:43.725Z","address_match_indicator":false,"shipping_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"payer":{"email":"test@example.com","billing_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"browser_data":{"accept_header":"text/html","color_depth":"TWENTY_FOUR_BITS","ip":"127.0.0.1","java_enabled":false,"javascript_enabled":true,"language":"en-US","screen_height":1080,"screen_width":1920,"challenge_window_size":"FULL_SCREEN","timezone":"0","user_agent":"Mozilla/5.0"},"challenge_notification_url":"https://developer.globalpayments.com/3ds2/challenge-notification"}
+[2026-02-10T17:50:44.075Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "1c52cc55-b1d4-4a84-96a8-af356c97ee4b",
+  "acs_trans_id" : "fee11471-3f78-4d34-9d32-48777777ae84",
+  "ds_trans_id" : "033fdaf2-c2cb-475b-8664-a5b31ee9ebcb",
+  "authentication_value" : "AJkBAGR5lAAAAAPphAFpdAAAAAA=",
+  "eci" : "02",
+  "acs_rendering_type" : { },
+  "status" : "AUTHENTICATION_SUCCESSFUL",
+  "status_reason" : "MEDIUM_CONFIDENCE",
+  "authentication_source" : "BROWSER",
+  "message_category" : "PAYMENT_AUTHENTICATION",
+  "message_version" : "2.2.0",
+  "acs_refer
+[2026-02-10T17:50:44.075Z] [initiate-auth] [RESPONSE] {"status":"AUTHENTICATION_SUCCESSFUL","eci":"02"}
+[2026-02-10T17:50:51.825Z] [authorize] [REQUEST] {"card":"535456******0004","amount":10,"currency":"EUR","order_id":"nodejs-test-001","eci":"02"}
+[2026-02-10T17:50:52.739Z] [authorize] [RESPONSE] {"response_code":"00","response_message":"[ test system ] AUTHORISED","transaction_id":"17707458521426331"}
+[2026-02-10T18:00:04.341Z] [check-enrollment] [REQUEST] {"card":"422200******5344","order_id":"nodejs-test-visa-001"}
+[2026-02-10T18:00:04.341Z] [gp-3ds2-api] [POST protocol-versions] {"request_timestamp":"2026-02-10T18:00:04.341000","merchant_id":"radoslav","account_id":"internet","number":"4222000006285344","scheme":"VISA"}
+[2026-02-10T18:00:04.752Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "0c1edcb5-ab15-4203-ad09-35ef543eb44f",
+  "enrolled" : true,
+  "ds_protocol_version_start" : "2.1.0",
+  "ds_protocol_version_end" : "2.2.0",
+  "acs_protocol_version_start" : "2.1.0",
+  "acs_protocol_version_end" : "2.2.0",
+  "method_url" : "https://test.portal.gpwebpay.com/pay-sim/sim/acs",
+  "acs_info_indicator" : [ "NOT_AVAILABLE" ]
+}
+[2026-02-10T18:00:04.752Z] [check-enrollment] [RESPONSE] {"enrolled":true,"server_trans_id":"0c1edcb5-ab15-4203-ad09-35ef543eb44f"}
+[2026-02-10T18:00:09.715Z] [check-enrollment] [REQUEST] {"card":"422200******5344","order_id":"nodejs-test-visa-001"}
+[2026-02-10T18:00:09.715Z] [gp-3ds2-api] [POST protocol-versions] {"request_timestamp":"2026-02-10T18:00:09.715000","merchant_id":"radoslav","account_id":"internet","number":"4222000006285344","scheme":"VISA"}
+[2026-02-10T18:00:10.012Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "451299ff-7500-424d-af2c-03a5a45082bd",
+  "enrolled" : true,
+  "ds_protocol_version_start" : "2.1.0",
+  "ds_protocol_version_end" : "2.2.0",
+  "acs_protocol_version_start" : "2.1.0",
+  "acs_protocol_version_end" : "2.2.0",
+  "method_url" : "https://test.portal.gpwebpay.com/pay-sim/sim/acs",
+  "acs_info_indicator" : [ "NOT_AVAILABLE" ]
+}
+[2026-02-10T18:00:10.012Z] [check-enrollment] [RESPONSE] {"enrolled":true,"server_trans_id":"451299ff-7500-424d-af2c-03a5a45082bd"}
+[2026-02-10T18:00:28.951Z] [initiate-auth] [REQUEST] {"card":"422200******5344","amount":"1000","currency":"EUR","server_trans_id":"451299ff-7500-424d-af2c-03a5a45082bd"}
+[2026-02-10T18:00:28.951Z] [gp-3ds2-api] [POST authentications] {"request_timestamp":"2026-02-10T18:00:28.951000","authentication_source":"BROWSER","authentication_request_type":"PAYMENT_TRANSACTION","message_category":"PAYMENT_AUTHENTICATION","message_version":"2.2.0","server_trans_id":"451299ff-7500-424d-af2c-03a5a45082bd","merchant_id":"radoslav","account_id":"internet","method_url_completion":"NO","merchant_contact_url":"https://developer.globalpayments.com","card_detail":{"number":"4222000006285344","scheme":"VISA","expiry_month":"12","expiry_year":"28","full_name":"Test Customer","first_name":"Test","last_name":"Customer"},"order":{"amount":"1000","currency":"EUR","id":"nodejs-test-visa-001","date_time_created":"2026-02-10T18:00:28.951Z","address_match_indicator":false,"shipping_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"payer":{"email":"test@example.com","billing_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"browser_data":{"accept_header":"text/html","color_depth":"TWENTY_FOUR_BITS","ip":"127.0.0.1","java_enabled":false,"javascript_enabled":true,"language":"en-US","screen_height":1080,"screen_width":1920,"challenge_window_size":"FULL_SCREEN","timezone":"0","user_agent":"Mozilla/5.0"},"challenge_notification_url":"https://developer.globalpayments.com/3ds2/challenge-notification"}
+[2026-02-10T18:00:29.811Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "451299ff-7500-424d-af2c-03a5a45082bd",
+  "acs_trans_id" : "62bc4a70-06aa-41f1-9147-256f69b79f7a",
+  "ds_trans_id" : "4678f196-6322-45a8-89cf-badffd104835",
+  "authentication_value" : "AJkBBpkGUAAAAAPol4BBdQAAAAA=",
+  "eci" : "05",
+  "acs_rendering_type" : { },
+  "status" : "AUTHENTICATION_SUCCESSFUL",
+  "status_reason" : "MEDIUM_CONFIDENCE",
+  "authentication_source" : "BROWSER",
+  "message_category" : "PAYMENT_AUTHENTICATION",
+  "message_version" : "2.2.0",
+  "acs_refer
+[2026-02-10T18:00:29.812Z] [initiate-auth] [RESPONSE] {"status":"AUTHENTICATION_SUCCESSFUL","eci":"05"}
+[2026-02-10T18:00:52.408Z] [check-enrollment] [REQUEST] {"card":"554001******7800","order_id":"nodejs-test-fail-001"}
+[2026-02-10T18:00:52.408Z] [gp-3ds2-api] [POST protocol-versions] {"request_timestamp":"2026-02-10T18:00:52.408000","merchant_id":"radoslav","account_id":"internet","number":"5540010585397800","scheme":"MASTERCARD"}
+[2026-02-10T18:00:52.716Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "8f3644f8-2cca-4169-b6b7-e6a18e7c2a0e",
+  "enrolled" : true,
+  "ds_protocol_version_start" : "2.1.0",
+  "ds_protocol_version_end" : "2.2.0",
+  "acs_protocol_version_start" : "2.1.0",
+  "acs_protocol_version_end" : "2.2.0",
+  "method_url" : "https://api.sandbox.globalpay-ecommerce.com/acs-simulator/notify",
+  "acs_info_indicator" : [ "NOT_AVAILABLE" ]
+}
+[2026-02-10T18:00:52.716Z] [check-enrollment] [RESPONSE] {"enrolled":true,"server_trans_id":"8f3644f8-2cca-4169-b6b7-e6a18e7c2a0e"}
+[2026-02-10T18:01:14.997Z] [initiate-auth] [REQUEST] {"card":"554001******7800","amount":"1000","currency":"EUR","server_trans_id":"8f3644f8-2cca-4169-b6b7-e6a18e7c2a0e"}
+[2026-02-10T18:01:14.997Z] [gp-3ds2-api] [POST authentications] {"request_timestamp":"2026-02-10T18:01:14.997000","authentication_source":"BROWSER","authentication_request_type":"PAYMENT_TRANSACTION","message_category":"PAYMENT_AUTHENTICATION","message_version":"2.2.0","server_trans_id":"8f3644f8-2cca-4169-b6b7-e6a18e7c2a0e","merchant_id":"radoslav","account_id":"internet","method_url_completion":"NO","merchant_contact_url":"https://developer.globalpayments.com","card_detail":{"number":"5540010585397800","scheme":"MASTERCARD","expiry_month":"12","expiry_year":"28","full_name":"Test Customer","first_name":"Test","last_name":"Customer"},"order":{"amount":"1000","currency":"EUR","id":"nodejs-test-fail-001","date_time_created":"2026-02-10T18:01:14.997Z","address_match_indicator":false,"shipping_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"payer":{"email":"test@example.com","billing_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"browser_data":{"accept_header":"text/html","color_depth":"TWENTY_FOUR_BITS","ip":"127.0.0.1","java_enabled":false,"javascript_enabled":true,"language":"en-US","screen_height":1080,"screen_width":1920,"challenge_window_size":"FULL_SCREEN","timezone":"0","user_agent":"Mozilla/5.0"},"challenge_notification_url":"https://developer.globalpayments.com/3ds2/challenge-notification"}
+[2026-02-10T18:01:15.450Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "8f3644f8-2cca-4169-b6b7-e6a18e7c2a0e",
+  "acs_trans_id" : "10e78340-7bf0-4ef6-803f-3c8d245e212d",
+  "ds_trans_id" : "962630cd-3499-4cb8-bd72-a0e4e1710b31",
+  "eci" : "00",
+  "acs_rendering_type" : { },
+  "status" : "AUTHENTICATION_FAILED",
+  "status_reason" : "CARD_AUTHENTICATION_FAILED",
+  "authentication_source" : "BROWSER",
+  "message_category" : "PAYMENT_AUTHENTICATION",
+  "message_version" : "2.2.0",
+  "acs_reference_number" : "3DS_LOA_ACS_INTE_020200_00293"
+}
+[2026-02-10T18:01:15.450Z] [initiate-auth] [RESPONSE] {"status":"AUTHENTICATION_FAILED","eci":"00"}
+[2026-02-11T11:38:08.977Z] [check-enrollment] [REQUEST] {"card":"535456******0004","order_id":"final-test-1770809888"}
+[2026-02-11T11:38:08.979Z] [gp-3ds2-api] [POST protocol-versions] {"request_timestamp":"2026-02-11T11:38:08.978000","merchant_id":"radoslav","account_id":"internet","number":"5354560000000004","scheme":"MASTERCARD"}
+[2026-02-11T11:38:09.535Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "4ab9fe1c-6b10-4770-ad3c-16bfa953e69d",
+  "enrolled" : true,
+  "ds_protocol_version_start" : "2.2.0",
+  "ds_protocol_version_end" : "2.2.0",
+  "acs_protocol_version_start" : "2.2.0",
+  "acs_protocol_version_end" : "2.2.0",
+  "method_url" : "https://api.sandbox.globalpay-ecommerce.com/acs-simulator/notify",
+  "acs_info_indicator" : [ "NOT_AVAILABLE" ]
+}
+[2026-02-11T11:38:09.536Z] [check-enrollment] [RESPONSE] {"enrolled":true,"server_trans_id":"4ab9fe1c-6b10-4770-ad3c-16bfa953e69d"}
+[2026-02-11T11:38:09.655Z] [initiate-auth] [REQUEST] {"card":"535456******0004","amount":"1000","currency":"EUR","server_trans_id":"4ab9fe1c-6b10-4770-ad3c-16bfa953e69d"}
+[2026-02-11T11:38:09.656Z] [gp-3ds2-api] [POST authentications] {"request_timestamp":"2026-02-11T11:38:09.655000","authentication_source":"BROWSER","authentication_request_type":"PAYMENT_TRANSACTION","message_category":"PAYMENT_AUTHENTICATION","message_version":"2.2.0","server_trans_id":"4ab9fe1c-6b10-4770-ad3c-16bfa953e69d","merchant_id":"radoslav","account_id":"internet","method_url_completion":"NO","merchant_contact_url":"https://developer.globalpayments.com","card_detail":{"number":"5354560000000004","scheme":"MASTERCARD","expiry_month":"12","expiry_year":"28","full_name":"Test Customer","first_name":"Test","last_name":"Customer"},"order":{"amount":"1000","currency":"EUR","id":"final-test-1770809888","date_time_created":"2026-02-11T11:38:09.655Z","address_match_indicator":false,"shipping_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"payer":{"email":"test@example.com","billing_address":{"line1":"Flat 123","line2":"House 456","city":"Halifax","postal_code":"W5 9HR","country":"826"}},"browser_data":{"accept_header":"text/html","color_depth":"TWENTY_FOUR_BITS","ip":"127.0.0.1","java_enabled":false,"javascript_enabled":true,"language":"en-US","screen_height":1080,"screen_width":1920,"challenge_window_size":"FULL_SCREEN","timezone":"0","user_agent":"Mozilla/5.0"},"challenge_notification_url":"https://developer.globalpayments.com/3ds2/challenge-notification"}
+[2026-02-11T11:38:09.908Z] [gp-3ds2-api] [RESPONSE 200] {
+  "server_trans_id" : "4ab9fe1c-6b10-4770-ad3c-16bfa953e69d",
+  "acs_trans_id" : "ad89172b-7773-4cd1-85ea-2a4c5aaab50c",
+  "ds_trans_id" : "6c8c4bee-4277-495d-9c9c-4b8889fef985",
+  "authentication_value" : "HJ50BnvOwzNaVIUuI56hRPr3RVA=",
+  "eci" : "02",
+  "acs_rendering_type" : { },
+  "status" : "AUTHENTICATION_SUCCESSFUL",
+  "status_reason" : "MEDIUM_CONFIDENCE",
+  "authentication_source" : "BROWSER",
+  "message_category" : "PAYMENT_AUTHENTICATION",
+  "message_version" : "2.2.0",
+  "acs_refer
+[2026-02-11T11:38:09.909Z] [initiate-auth] [RESPONSE] {"status":"AUTHENTICATION_SUCCESSFUL","eci":"02"}
+[2026-02-11T11:38:10.057Z] [authorize] [REQUEST] {"card":"535456******0004","amount":10,"currency":"EUR","order_id":"final-test-1770809888","eci":"02"}
+[2026-02-11T11:38:10.705Z] [authorize] [RESPONSE] {"response_code":"00","response_message":"[ test system ] AUTHORISED","transaction_id":"17708098902925601"}

@@ -30,6 +30,13 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!-- Gson for JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
         <!-- Servlet API -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -68,7 +75,7 @@
                     <configuration>
                         <properties>
                             <cargo.servlet.host>0.0.0.0</cargo.servlet.host>
-                            <cargo.servlet.port>8000</cargo.servlet.port>
+                            <cargo.servlet.port>3003</cargo.servlet.port>
                             <cargo.servlet.uriEncoding>UTF-8</cargo.servlet.uriEncoding>
                             <cargo.context>/</cargo.context>
                         </properties>
