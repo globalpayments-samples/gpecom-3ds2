@@ -307,10 +307,16 @@ app.post('/api/check-enrollment', async (req, res) => {
 
             const enrolled = doc.enrolled === true || doc.enrolled === 'True' || doc.enrolled === 'Y';
 
-            // Extract method data
+            // Generate method data (SDK does this internally from server_trans_id + methodNotificationUrl)
             let methodData = null;
             if (doc.method_data && doc.method_data.encoded_method_data) {
                 methodData = doc.method_data.encoded_method_data;
+            } else if (doc.method_url && doc.server_trans_id && METHOD_NOTIFICATION_URL) {
+                const methodDataObj = {
+                    threeDSServerTransID: doc.server_trans_id,
+                    threeDSMethodNotificationURL: METHOD_NOTIFICATION_URL,
+                };
+                methodData = Buffer.from(JSON.stringify(methodDataObj)).toString('base64');
             }
 
             logApi('check-enrollment', 'RESPONSE', { enrolled, server_trans_id: doc.server_trans_id });
@@ -372,7 +378,7 @@ app.post('/api/initiate-auth', async (req, res) => {
             // Parse cardholder name
             const names = cardHolder.split(' ', 2);
             const firstName = names[0] || '';
-            const lastName = names.length >= 2 ? names[1] : '';
+            const lastName = names.length >= 2 ? names[1] : names[0];
             const expMonth = expDate.slice(0, 2);
             const expYear = expDate.slice(2, 4);
 

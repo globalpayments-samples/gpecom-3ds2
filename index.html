@@ -9,12 +9,136 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://globalpayments-samples.github.io/css/styles.css">
     <style>
+        /* ========================================
+           GP 3DS2 — Custom Styles
+           Colors: --gp-global-blue #262AFF
+                   --gp-deep-blue   #1B1EC6
+                   --gp-pulse-blue  #1CABFF
+                   --gp-success     #10B981
+                   --gp-warning     #FFCC00
+                   --gp-error       #F4364C
+                   --gp-black       #0C0C0C
+                   --gp-charcoal    #595959
+                   --gp-smoke       #C4C4C4
+                   --gp-fog         #EEEEEE
+                   --gp-haze        #F4F4F4
+                   --gp-mist        #F8F8F8
+           ======================================== */
+
+        /* Hero section */
+        .gp-hero {
+            background: linear-gradient(135deg, #262AFF 0%, #1B1EC6 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .gp-hero h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .gp-hero p {
+            margin: 0;
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+        .gp-hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Controls toolbar */
+        .gp-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0.75rem 1rem;
+            background: #F8F8F8;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .gp-control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+        }
+        .gp-control-label {
+            color: #595959;
+            font-weight: 500;
+        }
+        .gp-control-select {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #C4C4C4;
+            font-size: 0.8125rem;
+            font-family: inherit;
+            cursor: pointer;
+            background: white;
+            color: #0C0C0C;
+        }
+        .gp-control-select:focus {
+            outline: none;
+            border-color: #262AFF;
+            box-shadow: 0 0 0 3px rgba(38, 42, 255, 0.1);
+        }
+        .gp-control-divider {
+            width: 1px;
+            height: 24px;
+            background: #C4C4C4;
+        }
+        .gp-toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .gp-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .gp-toggle-track {
+            position: absolute;
+            inset: 0;
+            background: #C4C4C4;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+        .gp-toggle input:checked + .gp-toggle-track {
+            background: #262AFF;
+        }
+        .gp-toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .gp-toggle input:checked ~ .gp-toggle-thumb {
+            transform: translateX(16px);
+        }
+
         /* 3DS2 Flow Progress Indicator */
         .gp-progress-steps {
             display: flex;
             justify-content: space-between;
             margin-bottom: 2rem;
-            padding: 0 1rem;
+            padding: 0 2rem;
         }
         .gp-step {
             flex: 1;
@@ -28,85 +152,169 @@
             right: -50%;
             width: 100%;
             height: 2px;
-            background: #e0e0e0;
+            background: #EEEEEE;
+            transition: background 0.3s;
         }
         .gp-step.completed:not(:last-child)::after {
-            background: #00a651;
+            background: #10B981;
         }
         .gp-step-circle {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #e0e0e0;
-            color: #666;
+            background: #EEEEEE;
+            color: #C4C4C4;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 8px;
-            font-weight: 600;
-            font-size: 14px;
+            margin: 0 auto 6px;
+            font-weight: 700;
+            font-size: 13px;
             position: relative;
             z-index: 1;
+            transition: all 0.3s;
         }
         .gp-step.active .gp-step-circle {
-            background: #00263e;
+            background: #262AFF;
             color: white;
+            box-shadow: 0 0 0 4px rgba(38, 42, 255, 0.15);
         }
         .gp-step.completed .gp-step-circle {
-            background: #00a651;
+            background: #10B981;
             color: white;
         }
         .gp-step-label {
-            font-size: 12px;
-            color: #666;
+            font-size: 11px;
+            color: #C4C4C4;
+            font-weight: 500;
+            transition: color 0.3s;
         }
         .gp-step.active .gp-step-label {
-            color: #00263e;
+            color: #262AFF;
             font-weight: 600;
         }
+        .gp-step.completed .gp-step-label {
+            color: #10B981;
+        }
 
-        /* Test Cards Grid */
+        /* Test Cards */
+        .gp-test-cards-section {
+            margin-bottom: 1.5rem;
+        }
+        .gp-test-cards-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #EEEEEE;
+        }
+        .gp-test-cards-brand svg { flex-shrink: 0; }
+        .gp-test-cards-brand-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #0C0C0C;
+        }
+        .gp-test-cards-brand-sub {
+            font-size: 0.75rem;
+            color: #595959;
+            margin-left: auto;
+        }
         .gp-test-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 0.75rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.5rem;
         }
         .gp-test-card {
-            padding: 0.75rem;
-            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border: 1px solid #EEEEEE;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
+            background: white;
         }
         .gp-test-card:hover {
-            border-color: #00263e;
-            background: #f8f9fa;
+            border-color: #262AFF;
+            background: rgba(38, 42, 255, 0.02);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(38, 42, 255, 0.08);
         }
+        .gp-test-card:active { transform: translateY(0); }
+        .gp-test-card-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .gp-test-card-indicator.success { background: #10B981; }
+        .gp-test-card-indicator.attempted { background: #1CABFF; }
+        .gp-test-card-indicator.failed { background: #F4364C; }
+        .gp-test-card-indicator.challenge { background: #FFCC00; }
+        .gp-test-card-info { flex: 1; min-width: 0; }
         .gp-test-card-number {
             font-family: 'Courier New', monospace;
             font-weight: 600;
-            color: #00263e;
-            font-size: 14px;
+            color: #0C0C0C;
+            font-size: 13px;
+            letter-spacing: 0.02em;
         }
         .gp-test-card-desc {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
+            font-size: 11px;
+            color: #595959;
+            margin-top: 1px;
         }
+        .gp-test-card-eci {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: #595959;
+            background: #F4F4F4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .gp-test-legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+            padding: 0.75rem 1rem;
+            background: #F8F8F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #595959;
+        }
+        .gp-test-legend-item { display: flex; align-items: center; gap: 6px; }
+        .gp-test-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .gp-test-info-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 0.875rem;
+            background: rgba(28, 171, 255, 0.06);
+            border-left: 3px solid #1CABFF;
+            border-radius: 0 6px 6px 0;
+            font-size: 12px;
+            color: #595959;
+            margin-top: 0.75rem;
+        }
+        .gp-test-info-bar strong { color: #0C0C0C; }
 
         /* Challenge iframe */
         #challengeFrame {
             width: 100%;
             height: 450px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #EEEEEE;
             border-radius: 8px;
             background: white;
         }
 
         /* JSON Display */
         .gp-json-display {
-            background: #1e1e1e;
+            background: #0C0C0C;
             color: #d4d4d4;
             padding: 1rem;
             border-radius: 8px;
@@ -115,6 +323,7 @@
             overflow-x: auto;
             max-height: 300px;
             overflow-y: auto;
+            line-height: 1.5;
         }
 
         /* Loading spinner */
@@ -127,10 +336,9 @@
             border-radius: 50%;
             animation: gp-spin 0.8s linear infinite;
             margin-right: 8px;
+            vertical-align: middle;
         }
-        @keyframes gp-spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes gp-spin { to { transform: rotate(360deg); } }
 
         /* Collapsible sections */
         .gp-collapsible-header {
@@ -138,10 +346,12 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.5rem 0;
         }
         .gp-collapsible-header::before {
-            content: '▼';
-            font-size: 10px;
+            content: '▾';
+            font-size: 12px;
+            color: #595959;
             transition: transform 0.2s;
         }
         .gp-collapsible-header.collapsed::before {
@@ -158,47 +368,43 @@
         /* Status badges */
         .gp-badge {
             display: inline-block;
-            padding: 0.25rem 0.5rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
+            letter-spacing: 0.02em;
         }
         .gp-badge-success {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
         }
         .gp-badge-warning {
-            background: #fff3cd;
+            background: rgba(255, 204, 0, 0.15);
             color: #856404;
         }
         .gp-badge-error {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(244, 54, 76, 0.1);
+            color: #F4364C;
         }
 
-        /* Hero section */
-        .gp-hero {
-            background: linear-gradient(135deg, #00263e 0%, #004d7a 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
+        /* Response log entry */
+        .gp-log-entry {
+            border: 1px solid #EEEEEE;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
         }
-        .gp-hero h1 {
-            margin: 0 0 0.5rem;
-            font-size: 1.75rem;
+        .gp-log-entry .gp-collapsible-header {
+            padding: 0;
         }
-        .gp-hero p {
-            margin: 0;
-            opacity: 0.9;
+        .gp-log-entry .gp-json-display {
+            margin-top: 0.75rem;
         }
-        .gp-hero-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            margin-bottom: 1rem;
+        .gp-log-timestamp {
+            font-size: 11px;
+            color: #C4C4C4;
+            margin-left: auto;
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
@@ -228,6 +434,28 @@
             <span class="gp-hero-badge">GPeCOM XML API</span>
             <h1>3D Secure 2 Testing Environment</h1>
             <p>Test and validate 3DS2 authentication flows with Global Payments' GPeCOM product suite.</p>
+        </div>
+
+        <!-- Controls Toolbar -->
+        <div class="gp-controls">
+            <div class="gp-control-group">
+                <span class="gp-control-label">Backend</span>
+                <select id="backendSelector" class="gp-control-select">
+                    <option value="php">PHP</option>
+                    <option value="nodejs">Node.js</option>
+                    <option value="dotnet">.NET</option>
+                    <option value="java">Java</option>
+                </select>
+            </div>
+            <div class="gp-control-divider"></div>
+            <div class="gp-control-group">
+                <span class="gp-control-label">Demo Mode</span>
+                <label class="gp-toggle">
+                    <input type="checkbox" id="demoMode">
+                    <span class="gp-toggle-track"></span>
+                    <span class="gp-toggle-thumb"></span>
+                </label>
+            </div>
         </div>
 
         <!-- Progress Steps -->
@@ -266,81 +494,51 @@
             <div class="gp-tab-content active" id="3ds2-form">
                 <div class="gp-card">
                     <div class="gp-card-header">
-                        <h2 class="gp-card-title">3DS2 Payment Authentication</h2>
+                        <h2 class="gp-card-title">Payment Details</h2>
                         <p class="gp-card-description">
-                            Test 3D Secure 2 authentication with frictionless approval or challenge flows.
+                            Enter card details to test 3DS2 frictionless or challenge authentication flows.
                         </p>
-                    </div>
-
-                    <!-- Backend & Demo Mode Controls -->
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                        <div class="gp-alert gp-alert-info" style="flex: 1; min-width: 200px; margin: 0;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div>
-                                    <strong>Backend</strong>
-                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Select the server-side language to use</p>
-                                </div>
-                                <select id="backendSelector" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; cursor: pointer;">
-                                    <option value="php">PHP</option>
-                                    <option value="nodejs">Node.js</option>
-                                    <option value="dotnet">.NET</option>
-                                    <option value="java">Java</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="gp-alert gp-alert-warning" style="flex: 1; min-width: 200px; margin: 0;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div>
-                                    <strong>Demo Mode</strong>
-                                    <p style="margin: 0.25rem 0 0; font-size: 0.875rem;">Test UI flow without actual API calls</p>
-                                </div>
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="checkbox" id="demoMode" style="width: 20px; height: 20px; margin-right: 8px;">
-                                    <span id="demoModeLabel">Off</span>
-                                </label>
-                            </div>
-                        </div>
                     </div>
 
                     <form id="paymentForm" class="gp-form">
                         <div class="gp-form-group">
-                            <label for="cardNumber" class="gp-label">Card Number:</label>
-                            <input type="text" id="cardNumber" name="cardNumber" class="gp-input" placeholder="4222000006285344" maxlength="19" required>
+                            <label for="cardNumber" class="gp-label">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber" class="gp-input" placeholder="4222 0000 0628 5344" maxlength="19" required>
                         </div>
 
                         <div class="gp-form-row">
                             <div class="gp-form-group">
-                                <label for="expDate" class="gp-label">Expiry (MMYY):</label>
+                                <label for="expDate" class="gp-label">Expiry (MMYY)</label>
                                 <input type="text" id="expDate" name="expDate" class="gp-input" placeholder="1228" maxlength="4" required>
                             </div>
                             <div class="gp-form-group">
-                                <label for="cvv" class="gp-label">CVV:</label>
+                                <label for="cvv" class="gp-label">CVV</label>
                                 <input type="text" id="cvv" name="cvv" class="gp-input" placeholder="123" maxlength="4" required>
                             </div>
                         </div>
 
                         <div class="gp-form-group">
-                            <label for="cardHolder" class="gp-label">Cardholder Name:</label>
+                            <label for="cardHolder" class="gp-label">Cardholder Name</label>
                             <input type="text" id="cardHolder" name="cardHolder" class="gp-input" placeholder="John Doe" required>
                         </div>
 
                         <div class="gp-form-row">
                             <div class="gp-form-group">
-                                <label for="amount" class="gp-label">Amount (cents):</label>
+                                <label for="amount" class="gp-label">Amount (cents)</label>
                                 <input type="number" id="amount" name="amount" class="gp-input" placeholder="1000" value="1000" required>
                             </div>
                             <div class="gp-form-group">
-                                <label for="currency" class="gp-label">Currency:</label>
+                                <label for="currency" class="gp-label">Currency</label>
                                 <select id="currency" name="currency" class="gp-select" required>
-                                    <option value="USD">USD</option>
                                     <option value="EUR">EUR</option>
+                                    <option value="USD">USD</option>
                                     <option value="GBP">GBP</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="gp-form-group">
-                            <label for="email" class="gp-label">Email:</label>
+                            <label for="email" class="gp-label">Email</label>
                             <input type="email" id="email" name="email" class="gp-input" placeholder="customer@example.com" value="test@example.com">
                         </div>
 
@@ -367,83 +565,158 @@
                     <div class="gp-card-header">
                         <h2 class="gp-card-title">Test Card Numbers</h2>
                         <p class="gp-card-description">
-                            Click on a card to auto-fill the payment form. All cards use expiry 12/25 and CVV 123.
+                            Click any card to auto-fill the payment form. All cards use expiry <strong>12/28</strong> and CVV <strong>123</strong>.
                         </p>
                     </div>
 
-                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Visa (Message Version 2.2)</h3>
-                    <div class="gp-test-cards">
-                        <div class="gp-test-card" onclick="fillTestCard('4222000006285344', 'VISA')">
-                            <div class="gp-test-card-number">4222000006285344</div>
-                            <div class="gp-test-card-desc">Frictionless Success (ECI 05)</div>
+                    <!-- Visa -->
+                    <div class="gp-test-cards-section">
+                        <div class="gp-test-cards-brand">
+                            <svg width="40" height="14" viewBox="0 0 40 14" fill="none"><path d="M16.4 0.5L10.8 13.5H7.2L4.5 3.2C4.3 2.4 4.2 2.1 3.5 1.7C2.5 1.2 0.9 0.7 0 0.4L0.1 0.5H5.8C6.5 0.5 7.2 1 7.3 1.8L8.7 9.3L12.2 0.5H16.4ZM29.5 9.3C29.5 5.8 24.5 5.6 24.5 4C24.5 3.5 25 2.9 26 2.8C27.3 2.7 28.8 3 30 3.6L30.6 0.9C29.5 0.5 28.2 0.2 26.7 0.2C22.8 0.2 20.1 2.3 20.1 5.2C20.1 7.4 22 8.5 23.5 9.2C25 9.9 25.5 10.3 25.5 10.9C25.5 11.8 24.4 12.1 23.4 12.2C21.8 12.2 20.3 11.7 19.2 11.2L18.6 14C19.8 14.5 21.5 14.9 23.2 14.9C27.4 14.9 29.5 12.8 29.5 9.3ZM38.3 13.5H40L36.5 0.5H33.6C33 0.5 32.4 0.9 32.2 1.4L26.5 13.5H30.7L31.5 11.2H36.6L37.1 13.5H38.3ZM32.7 8.2L34.8 2.5L36 8.2H32.7ZM19.5 0.5L16.2 13.5H12.2L15.5 0.5H19.5Z" fill="#1A1F71"/></svg>
+                            <span class="gp-test-cards-brand-label">Visa</span>
+                            <span class="gp-test-cards-brand-sub">Message Version 2.2 &middot; ECI 05 / 06 / 07</span>
                         </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000009719489', 'VISA')">
-                            <div class="gp-test-card-number">4222000009719489</div>
-                            <div class="gp-test-card-desc">Frictionless Success - No Method URL (ECI 05)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000005218627', 'VISA')">
-                            <div class="gp-test-card-number">4222000005218627</div>
-                            <div class="gp-test-card-desc">Attempted (ECI 06)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000002144131', 'VISA')">
-                            <div class="gp-test-card-number">4222000002144131</div>
-                            <div class="gp-test-card-desc">Authentication Failed (ECI 07)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000007275799', 'VISA')">
-                            <div class="gp-test-card-number">4222000007275799</div>
-                            <div class="gp-test-card-desc">Issuer Rejected (ECI 07)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000008880910', 'VISA')">
-                            <div class="gp-test-card-number">4222000008880910</div>
-                            <div class="gp-test-card-desc">Could Not Be Performed (ECI 07)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('4222000001227408', 'VISA')">
-                            <div class="gp-test-card-number">4222000001227408</div>
-                            <div class="gp-test-card-desc">Challenge Required</div>
+                        <div class="gp-test-cards">
+                            <div class="gp-test-card" onclick="fillTestCard('4222000006285344', 'VISA')">
+                                <div class="gp-test-card-indicator success"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0628 5344</div>
+                                    <div class="gp-test-card-desc">Frictionless Success</div>
+                                </div>
+                                <div class="gp-test-card-eci">05</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000009719489', 'VISA')">
+                                <div class="gp-test-card-indicator success"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0971 9489</div>
+                                    <div class="gp-test-card-desc">Frictionless Success (no Method URL)</div>
+                                </div>
+                                <div class="gp-test-card-eci">05</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000005218627', 'VISA')">
+                                <div class="gp-test-card-indicator attempted"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0521 8627</div>
+                                    <div class="gp-test-card-desc">Attempted</div>
+                                </div>
+                                <div class="gp-test-card-eci">06</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000002144131', 'VISA')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0214 4131</div>
+                                    <div class="gp-test-card-desc">Authentication Failed</div>
+                                </div>
+                                <div class="gp-test-card-eci">07</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000007275799', 'VISA')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0727 5799</div>
+                                    <div class="gp-test-card-desc">Issuer Rejected</div>
+                                </div>
+                                <div class="gp-test-card-eci">07</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000008880910', 'VISA')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0888 0910</div>
+                                    <div class="gp-test-card-desc">Could Not Be Performed</div>
+                                </div>
+                                <div class="gp-test-card-eci">07</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('4222000001227408', 'VISA')">
+                                <div class="gp-test-card-indicator challenge"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">4222 0000 0122 7408</div>
+                                    <div class="gp-test-card-desc">Challenge Required</div>
+                                </div>
+                                <div class="gp-test-card-eci">&mdash;</div>
+                            </div>
                         </div>
                     </div>
 
-                    <h3 style="margin: 1.5rem 0 0.75rem; font-size: 1rem;">Mastercard (Message Version 2.2)</h3>
-                    <div class="gp-test-cards">
-                        <div class="gp-test-card" onclick="fillTestCard('5354560000000004', 'MC')">
-                            <div class="gp-test-card-number">5354560000000004</div>
-                            <div class="gp-test-card-desc">Frictionless Success (ECI 02)</div>
+                    <!-- Mastercard -->
+                    <div class="gp-test-cards-section">
+                        <div class="gp-test-cards-brand">
+                            <svg width="26" height="16" viewBox="0 0 26 16" fill="none"><circle cx="9" cy="8" r="8" fill="#EB001B"/><circle cx="17" cy="8" r="8" fill="#F79E1B"/><path d="M13 1.7A8 8 0 0 1 15.3 8 8 8 0 0 1 13 14.3 8 8 0 0 1 10.7 8 8 8 0 0 1 13 1.7Z" fill="#FF5F00"/></svg>
+                            <span class="gp-test-cards-brand-label">Mastercard</span>
+                            <span class="gp-test-cards-brand-sub">Message Version 2.2 &middot; ECI 02 / 01 / 00</span>
                         </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5571596304025153', 'MC')">
-                            <div class="gp-test-card-number">5571596304025153</div>
-                            <div class="gp-test-card-desc">Frictionless Success - No Method URL (ECI 02)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5580364874958322', 'MC')">
-                            <div class="gp-test-card-number">5580364874958322</div>
-                            <div class="gp-test-card-desc">Attempted (ECI 01)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5540010585397800', 'MC')">
-                            <div class="gp-test-card-number">5540010585397800</div>
-                            <div class="gp-test-card-desc">Authentication Failed (ECI 00)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5588312194362669', 'MC')">
-                            <div class="gp-test-card-number">5588312194362669</div>
-                            <div class="gp-test-card-desc">Issuer Rejected (ECI 00)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5520680211891022', 'MC')">
-                            <div class="gp-test-card-number">5520680211891022</div>
-                            <div class="gp-test-card-desc">Could Not Be Performed (ECI 00)</div>
-                        </div>
-                        <div class="gp-test-card" onclick="fillTestCard('5506874496684651', 'MC')">
-                            <div class="gp-test-card-number">5506874496684651</div>
-                            <div class="gp-test-card-desc">Challenge Required</div>
+                        <div class="gp-test-cards">
+                            <div class="gp-test-card" onclick="fillTestCard('5354560000000004', 'MC')">
+                                <div class="gp-test-card-indicator success"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5354 5600 0000 0004</div>
+                                    <div class="gp-test-card-desc">Frictionless Success</div>
+                                </div>
+                                <div class="gp-test-card-eci">02</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5571596304025153', 'MC')">
+                                <div class="gp-test-card-indicator success"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5571 5963 0402 5153</div>
+                                    <div class="gp-test-card-desc">Frictionless Success (no Method URL)</div>
+                                </div>
+                                <div class="gp-test-card-eci">02</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5580364874958322', 'MC')">
+                                <div class="gp-test-card-indicator attempted"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5580 3648 7495 8322</div>
+                                    <div class="gp-test-card-desc">Attempted</div>
+                                </div>
+                                <div class="gp-test-card-eci">01</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5540010585397800', 'MC')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5540 0105 8539 7800</div>
+                                    <div class="gp-test-card-desc">Authentication Failed</div>
+                                </div>
+                                <div class="gp-test-card-eci">00</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5588312194362669', 'MC')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5588 3121 9436 2669</div>
+                                    <div class="gp-test-card-desc">Issuer Rejected</div>
+                                </div>
+                                <div class="gp-test-card-eci">00</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5520680211891022', 'MC')">
+                                <div class="gp-test-card-indicator failed"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5520 6802 1189 1022</div>
+                                    <div class="gp-test-card-desc">Could Not Be Performed</div>
+                                </div>
+                                <div class="gp-test-card-eci">00</div>
+                            </div>
+                            <div class="gp-test-card" onclick="fillTestCard('5506874496684651', 'MC')">
+                                <div class="gp-test-card-indicator challenge"></div>
+                                <div class="gp-test-card-info">
+                                    <div class="gp-test-card-number">5506 8744 9668 4651</div>
+                                    <div class="gp-test-card-desc">Challenge Required</div>
+                                </div>
+                                <div class="gp-test-card-eci">&mdash;</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="gp-alert gp-alert-info" style="margin-top: 1.5rem;">
-                        <strong>3DS2 Message Version 2.2 Test Cards</strong><br>
-                        These are the official test cards from Global Payments documentation. Use any future-dated expiry and any CVV.
-                        <br><br>
-                        <strong>ECI Values:</strong> Visa: 05 (success), 06 (attempted), 07 (failed) | Mastercard: 02 (success), 01 (attempted), 00 (failed)
+                    <!-- Legend -->
+                    <div class="gp-test-legend">
+                        <div class="gp-test-legend-item"><div class="gp-test-legend-dot" style="background:#10B981"></div> Success</div>
+                        <div class="gp-test-legend-item"><div class="gp-test-legend-dot" style="background:#1CABFF"></div> Attempted</div>
+                        <div class="gp-test-legend-item"><div class="gp-test-legend-dot" style="background:#F4364C"></div> Failed / Rejected / Unavailable</div>
+                        <div class="gp-test-legend-item"><div class="gp-test-legend-dot" style="background:#FFCC00"></div> Challenge</div>
                     </div>
 
-                    <div class="gp-alert gp-alert-warning" style="margin-top: 1rem;">
-                        <strong>Demo Mode:</strong> When Demo Mode is enabled, Challenge cards (4222000001227408, 5506874496684651) will simulate the challenge flow. Failed authentication cards will return appropriate error responses.
+                    <!-- Info bars -->
+                    <div class="gp-test-info-bar">
+                        <strong>Tip:</strong> Use any future-dated expiry and any CVV. The ECI badge on each card shows the expected E-Commerce Indicator value.
+                    </div>
+                    <div class="gp-test-info-bar" style="border-left-color: #FFCC00; background: rgba(255, 204, 0, 0.06); margin-top: 0.5rem;">
+                        <strong>Demo Mode:</strong> Challenge cards simulate the full challenge flow. Failed cards return appropriate error responses.
                     </div>
                 </div>
             </div>
@@ -454,13 +727,14 @@
                     <div class="gp-card-header">
                         <h2 class="gp-card-title">API Response Log</h2>
                         <p class="gp-card-description">
-                            View detailed API responses from each step of the 3DS2 authentication flow.
+                            Inspect the raw JSON responses from each step of the 3DS2 authentication flow.
                         </p>
                     </div>
 
                     <div id="responseLog">
-                        <div class="gp-alert gp-alert-info">
-                            No responses yet. Start a 3DS2 authentication to see the API responses here.
+                        <div style="text-align: center; padding: 2rem 1rem; color: #C4C4C4;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 0.75rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            <p style="margin: 0; font-size: 0.875rem;">No responses yet. Start a 3DS2 authentication to see API responses here.</p>
                         </div>
                     </div>
                 </div>
@@ -517,7 +791,6 @@
         // Demo mode toggle
         document.getElementById('demoMode').addEventListener('change', (e) => {
             state.demoMode = e.target.checked;
-            document.getElementById('demoModeLabel').textContent = state.demoMode ? 'On' : 'Off';
             if (state.demoMode) {
                 showStatus('info', 'Demo Mode Enabled', 'API calls will be simulated for UI testing.');
             } else {
@@ -606,17 +879,22 @@
         function updateResponseLog() {
             const container = document.getElementById('responseLog');
             if (state.responses.length === 0) {
-                container.innerHTML = '<div class="gp-alert gp-alert-info">No responses yet. Start a 3DS2 authentication to see the API responses here.</div>';
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem 1rem; color: #C4C4C4;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 0.75rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <p style="margin: 0; font-size: 0.875rem;">No responses yet. Start a 3DS2 authentication to see API responses here.</p>
+                    </div>`;
                 return;
             }
 
             container.innerHTML = state.responses.map((r, i) => `
-                <div style="margin-bottom: 1rem;">
+                <div class="gp-log-entry">
                     <div class="gp-collapsible-header" onclick="toggleCollapse(this)">
                         <strong>Step ${i + 1}: ${r.step}</strong>
                         <span class="gp-badge ${r.data.success ? 'gp-badge-success' : 'gp-badge-error'}">
                             ${r.data.success ? 'Success' : 'Failed'}
                         </span>
+                        <span class="gp-log-timestamp">${new Date(r.timestamp).toLocaleTimeString()}</span>
                     </div>
                     <div class="gp-collapsible-content" style="max-height: 300px;">
                         <pre class="gp-json-display">${JSON.stringify(r.data, null, 2)}</pre>
@@ -757,12 +1035,12 @@
                         <style>
                             body { font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100%; margin: 0; background: #f8f9fa; }
                             .demo-challenge { text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; }
-                            h2 { color: #00263e; margin-bottom: 1rem; }
-                            p { color: #666; margin-bottom: 1.5rem; }
-                            .spinner { width: 40px; height: 40px; border: 3px solid #e0e0e0; border-top-color: #00263e; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+                            h2 { color: #262AFF; margin-bottom: 1rem; }
+                            p { color: #595959; margin-bottom: 1.5rem; }
+                            .spinner { width: 40px; height: 40px; border: 3px solid #EEEEEE; border-top-color: #262AFF; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
                             @keyframes spin { to { transform: rotate(360deg); } }
-                            .progress { background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 1rem; }
-                            .progress-bar { background: #00a651; height: 100%; width: 0; animation: progress 2s ease-out forwards; }
+                            .progress { background: #EEEEEE; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 1rem; }
+                            .progress-bar { background: #10B981; height: 100%; width: 0; animation: progress 2s ease-out forwards; }
                             @keyframes progress { to { width: 100%; } }
                         </style>
                     </head>
