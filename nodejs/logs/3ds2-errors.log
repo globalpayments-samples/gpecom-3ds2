@@ -1,2 +1,0 @@
-[2026-02-10T17:01:38.752Z] [check-enrollment] ConfigurationError: Secure 3d is not configured for version TWO.
-[2026-02-10T17:14:37.146Z] [check-enrollment] TypeError: provider.getVersion is not a function
