@@ -3,11 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Payments - Developer Example</title>
+    <title>Global Payments - HPP Checkout</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://globalpayments-samples.github.io/css/styles.css">
+    <style>
+        /* HPP-specific styles */
+        .hpp-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .hpp-container {
+            width: 100%;
+            max-width: 500px;
+        }
+        #hppContainer {
+            overflow: hidden;
+            min-height: 500px;
+        }
+        #hppContainer iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+        .hpp-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            color: var(--gp-color-text-secondary, #666);
+        }
+        .hpp-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #262AFF;
+            border-radius: 50%;
+            animation: hpp-spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes hpp-spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -21,193 +64,128 @@
                     </picture>
                 </div>
                 <nav class="gp-header-nav">
+                    <a href="../">3DS2 Testing</a>
                     <a href="https://developer.globalpay.com/">Documentation</a>
-                    <a href="https://developer.globalpay.com/api">API Reference</a>
-                    <a href="https://developer.globalpay.com/sdks">SDKs</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <div class="gp-container">
-        <!-- Page Title -->
-        <h1 class="gp-page-title">SDK Integration Examples</h1>
-        <p class="gp-page-subtitle">Explore comprehensive examples of Global Payments SDK implementations across different payment scenarios.</p>
-
-        <!-- Tabs -->
-        <div class="gp-tabs">
-            <div class="gp-tab-list">
-                <button class="gp-tab-button active" data-tab="payment-form">Payment Form</button>
-                <button class="gp-tab-button" data-tab="tokenization">Tokenization</button>
-                <button class="gp-tab-button" data-tab="webhooks">Webhooks</button>
-                <button class="gp-tab-button" data-tab="recurring">Recurring Payments</button>
-            </div>
-
-            <!-- Payment Form Tab -->
-            <div class="gp-tab-content active" id="payment-form">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Credit Card Payment Form</h2>
-                        <p class="gp-card-description">
-                            Secure payment processing using Global Payments tokenization with client-side form validation.
-                        </p>
-                    </div>
-                    
-                    <form id="payment-form" class="gp-form" action="/process-payment" method="POST">
-                        <div class="gp-form-group">
-                            <label for="amount" class="gp-label">Amount ($):</label>
-                            <input type="number" id="amount" name="amount" class="gp-input" min="0.01" step="0.01" value="10.00" required>
-                        </div>
-                        
-                        <div class="gp-form-group">
-                            <label for="billing_zip" class="gp-label">Billing Zip Code:</label>
-                            <input type="text" id="billing_zip" name="billing_zip" class="gp-input" placeholder="12345" required>
-                        </div>
-
-                        <div class="gp-form-group">
-                            <label class="gp-label">Credit Card Information:</label>
-                            <div id="credit-card"></div>
-                        </div>
-
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Process Payment
-                        </button>
-                    </form>
+    <div class="hpp-page">
+        <div class="hpp-container">
+            <!-- Order Summary -->
+            <div class="gp-card" style="margin-bottom: 1rem;">
+                <div class="gp-card-header">
+                    <h2 class="gp-card-title">Order Summary</h2>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                    <span>Product</span>
+                    <span>Test Item</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid #eee; margin-top: 0.5rem; font-weight: 600;">
+                    <span>Total</span>
+                    <span id="totalAmount">EUR 19.99</span>
                 </div>
             </div>
 
-            <!-- Tokenization Tab -->
-            <div class="gp-tab-content" id="tokenization">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Card Tokenization</h2>
-                        <p class="gp-card-description">
-                            Securely tokenize payment methods for future use without storing sensitive card data.
-                        </p>
-                    </div>
-                    
-                    <div class="gp-alert gp-alert-info">
-                        <strong>Info:</strong> Tokens can be stored securely and used for future transactions without handling raw card data.
-                    </div>
-
-                    <form id="tokenization-form" class="gp-form">
-                        <div class="gp-form-group">
-                            <label class="gp-label">Card Information for Tokenization:</label>
-                            <div id="credit-card-token"></div>
-                        </div>
-
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Generate Token
-                        </button>
-                    </form>
-
-                    <div id="token-result" class="gp-hidden">
-                        <h3 class="gp-card-title gp-mt-lg">Generated Token:</h3>
-                        <div class="gp-code-block" id="token-display"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Webhooks Tab -->
-            <div class="gp-tab-content" id="webhooks">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Webhook Integration</h2>
-                        <p class="gp-card-description">
-                            Configure and test webhook endpoints for real-time payment notifications.
-                        </p>
-                    </div>
-                    
-                    <div class="gp-code-block">
-// Example webhook handler
-app.post('/webhook', (req, res) => {
-    const signature = req.headers['x-gp-signature'];
-    const payload = req.body;
-    
-    // Verify webhook signature
-    if (verifySignature(payload, signature)) {
-        handlePaymentEvent(payload);
-        res.status(200).send('OK');
-    } else {
-        res.status(400).send('Invalid signature');
-    }
-});
-                    </div>
-
-                    <div class="gp-alert gp-alert-warning">
-                        <strong>Security:</strong> Always verify webhook signatures to ensure requests are from Global Payments.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recurring Payments Tab -->
-            <div class="gp-tab-content" id="recurring">
-                <div class="gp-card">
-                    <div class="gp-card-header">
-                        <h2 class="gp-card-title">Recurring Payments</h2>
-                        <p class="gp-card-description">
-                            Set up subscription billing and recurring payment schedules.
-                        </p>
-                    </div>
-                    
-                    <form id="recurring-form" class="gp-form">
-                        <div class="gp-form-row">
-                            <div class="gp-form-group">
-                                <label for="subscription-amount" class="gp-label">Monthly Amount ($):</label>
-                                <input type="number" id="subscription-amount" name="subscription-amount" class="gp-input" min="1.00" step="0.01" value="29.99" required>
-                            </div>
-                            
-                            <div class="gp-form-group">
-                                <label for="billing-cycle" class="gp-label">Billing Cycle:</label>
-                                <select id="billing-cycle" name="billing-cycle" class="gp-select" required>
-                                    <option value="monthly">Monthly</option>
-                                    <option value="quarterly">Quarterly</option>
-                                    <option value="annually">Annually</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="gp-form-group">
-                            <label class="gp-label">Payment Method:</label>
-                            <div id="credit-card-recurring"></div>
-                        </div>
-
-                        <button type="submit" class="gp-button gp-button-primary gp-button-full">
-                            Set Up Subscription
-                        </button>
-                    </form>
+            <!-- HPP Embedded Container -->
+            <div class="gp-card" id="hppContainer">
+                <div class="hpp-loading" id="loadingIndicator">
+                    <div class="hpp-spinner"></div>
+                    <p>Loading secure payment form...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <!-- 
-        DEVELOPER NOTE: Update the following footer information to match your business:
-        - Company name and copyright year
-        - Update all links to point to your actual Terms of Service, Privacy Policy, and Refund Policy pages
-        - Refund Policy link is typically required by payment processor underwriting in addition to Terms and Privacy
-        - Ensure all linked policies are accessible and up-to-date before going live
-    -->
     <footer class="gp-footer">
         <div class="gp-container">
             <div class="gp-footer-content">
-                <div class="gp-footer-section">
-                    <p class="gp-footer-copyright">
-                        © 2024 Your Company Name. All rights reserved.
-                    </p>
-                </div>
-                <div class="gp-footer-section">
-                    <nav class="gp-footer-nav">
-                        <a href="/terms-of-service" class="gp-footer-link">Terms of Service</a>
-                        <a href="/privacy-policy" class="gp-footer-link">Privacy Policy</a>
-                        <a href="/refund-policy" class="gp-footer-link">Refund Policy</a>
-                    </nav>
-                </div>
+                <p class="gp-footer-copyright">&copy; 2026 Global Payments. HPP Checkout.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://globalpayments-samples.github.io/js/script.js"></script>
+    <!-- jQuery and rxp-hpp.js -->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="https://pay.sandbox.realexpayments.com/pay/js/rxp-hpp.js"></script>
+    <script>
+        $(document).ready(function() {
+            loadHPP();
+        });
+
+        function loadHPP() {
+            $.getJSON("api/hpp-request.php", {
+                amount: "19.99",
+                currency: "EUR",
+                name: "John Doe",
+                email: "customer@example.com"
+            }, function(hppJson) {
+                console.log("HPP JSON:", hppJson);
+
+                if (hppJson.error) {
+                    showError(hppJson.message);
+                    return;
+                }
+
+                $("#loadingIndicator").hide();
+
+                RealexHpp.setHppUrl("https://pay.sandbox.realexpayments.com/pay");
+
+                RealexHpp.embedded.init(
+                    "autoload",
+                    "hppContainer",
+                    "api/hpp-response.php",
+                    hppJson
+                );
+
+                window.addEventListener('message', receiveMessage, false);
+
+            }).fail(function(jqXHR, textStatus, error) {
+                showError("Failed to load payment form: " + textStatus);
+            });
+        }
+
+        function showError(message) {
+            $("#hppContainer").html(
+                '<div class="gp-alert gp-alert-error" style="margin: 2rem;">' +
+                '<strong>Error</strong><br>' + message +
+                '</div>'
+            );
+        }
+
+        function receiveMessage(event) {
+            let response = event.data;
+            if (typeof response === 'string') {
+                try {
+                    response = JSON.parse(response);
+                } catch (e) {
+                    return;
+                }
+            }
+
+            if (response && response.RESULT !== undefined) {
+                console.log("Payment Response:", response);
+
+                if (response.RESULT === '00') {
+                    $("#hppContainer").html(
+                        '<div class="gp-alert gp-alert-success" style="margin: 2rem; text-align: center;">' +
+                        '<strong>Payment Successful!</strong><br>' +
+                        'Order ID: ' + (response.ORDER_ID || 'N/A') + '<br>' +
+                        'Auth Code: ' + (response.AUTHCODE || 'N/A') +
+                        '</div>'
+                    );
+                } else {
+                    $("#hppContainer").html(
+                        '<div class="gp-alert gp-alert-error" style="margin: 2rem; text-align: center;">' +
+                        '<strong>Payment Failed</strong><br>' +
+                        (response.MESSAGE || 'An error occurred') +
+                        '</div>'
+                    );
+                }
+            }
+        }
+    </script>
 </body>
 </html>

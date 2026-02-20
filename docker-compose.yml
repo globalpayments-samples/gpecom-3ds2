@@ -1,4 +1,13 @@
 services:
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - payments
+
   nodejs:
     build: 
       context: ./nodejs
