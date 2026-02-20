@@ -50,16 +50,25 @@ Card Entry → Enrollment Check → Method URL → Authentication → Challenge 
 
 ## Quick Start
 
-### 1. Configure credentials
+### Option A — Docker (recommended)
 
-Copy `.env.example` to `.env` in the backend directory you want to run:
+The easiest way to run the project. Docker Compose starts the frontend and all backend services with a single command.
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (includes Docker Compose)
+
+#### 1. Configure credentials
+
+Copy the `.env.example` file for each backend you want to run and fill in your GP sandbox credentials:
 
 ```sh
 cp php/.env.example php/.env
-# Then edit php/.env with your GP sandbox credentials
+cp nodejs/.env.example nodejs/.env
+cp dotnet/.env.example dotnet/.env
+cp java/.env.example java/.env
 ```
 
-Required variables:
+Edit each `.env` file with your credentials:
+
 ```
 GPECOM_MERCHANT_ID=your_merchant_id
 GPECOM_SHARED_SECRET=your_shared_secret
@@ -68,31 +77,97 @@ METHOD_NOTIFICATION_URL=https://developer.globalpayments.com/3ds2/method-notific
 CHALLENGE_NOTIFICATION_URL=https://developer.globalpayments.com/3ds2/challenge-notification
 ```
 
-### 2. Start a backend
+#### 2. Start the services
 
-**PHP** (port 8080):
+Run all backends at once:
+
 ```sh
-cd php && composer install && php -S localhost:8080 -t ..
+docker compose up --build
 ```
 
-**Node.js** (port 3001):
+Or start only the frontend and a specific backend (e.g. PHP):
+
+```sh
+docker compose up --build frontend php
+```
+
+#### 3. Open the UI
+
+Navigate to **`http://localhost:8000`** and select a backend from the dropdown.
+
+#### Port reference
+
+| Service  | URL                        |
+|----------|----------------------------|
+| Frontend | http://localhost:8000      |
+| Node.js  | http://localhost:8001      |
+| Python   | http://localhost:8002      |
+| PHP      | http://localhost:8003      |
+| Java     | http://localhost:8004      |
+| Go       | http://localhost:8005      |
+| .NET     | http://localhost:8006      |
+
+#### Useful commands
+
+```sh
+# View logs for a specific service
+docker compose logs -f php
+
+# Stop all services
+docker compose down
+
+# Rebuild after code changes
+docker compose up --build
+
+# Run automated tests (requires all services healthy)
+docker compose --profile testing up --build
+```
+
+---
+
+### Option B — Run locally without Docker
+
+**Prerequisites:** Install the runtime for the backend you want to use (PHP + Composer, Node.js, .NET SDK, or Java + Maven).
+
+#### 1. Configure credentials
+
+Copy `.env.example` to `.env` in the backend directory and fill in your credentials:
+
+```sh
+cp php/.env.example php/.env
+```
+
+#### 2. Start a backend
+
+**PHP:**
+```sh
+cd php && composer install && php -S localhost:8080
+```
+
+**Node.js:**
 ```sh
 cd nodejs && npm install && node server.js
 ```
 
-**.NET** (port 3002):
+**.NET:**
 ```sh
 cd dotnet && dotnet run
 ```
 
-**Java** (port 3003):
+**Java:**
 ```sh
 cd java && mvn clean package cargo:run
 ```
 
-### 3. Open the UI
+#### 3. Serve the frontend
 
-Navigate to `http://localhost:<port>`. The frontend auto-detects which backend you're using based on the port.
+In a separate terminal from the project root:
+
+```sh
+python3 -m http.server 8000
+```
+
+Then open **`http://localhost:8000`** and select your backend.
 
 ## API Endpoints
 
