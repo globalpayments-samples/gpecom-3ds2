@@ -764,15 +764,15 @@
     <script>
         // Backend configuration
         const backends = {
-            php:    { base: '/php/api', suffix: '.php' },
-            nodejs: { base: '/api', suffix: '' },
-            dotnet: { base: '/api', suffix: '' },
-            java:   { base: '/api', suffix: '' }
+            php:    { origin: 'http://localhost:8000', apiPath: '/php/api', suffix: '.php' },
+            nodejs: { origin: 'http://localhost:3001', apiPath: '/api', suffix: '' },
+            dotnet: { origin: 'http://localhost:3002', apiPath: '/api', suffix: '' },
+            java:   { origin: 'http://localhost:3003', apiPath: '/api', suffix: '' }
         };
 
         function getApiUrl(endpoint) {
             const b = backends[state.backend];
-            return b.base + '/' + endpoint + b.suffix;
+            return b.origin + b.apiPath + '/' + endpoint + b.suffix;
         }
 
         // Application state
@@ -799,7 +799,7 @@
         });
 
         // Auto-detect backend from server port
-        const portBackendMap = { '8080': 'php', '3001': 'nodejs', '3002': 'dotnet', '3003': 'java' };
+        const portBackendMap = { '8000': 'php', '3001': 'nodejs', '3002': 'dotnet', '3003': 'java' };
         const detectedBackend = portBackendMap[window.location.port];
         if (detectedBackend) {
             state.backend = detectedBackend;

@@ -4,7 +4,7 @@
   "description": "Global Payments SDK starter template for multiple languages",
   "type": "commonjs",
   "scripts": {
-    "start": "node nodejs/server.js",
+    "start": "concurrently --names \"node,php,dotnet,java\" --prefix-colors \"cyan,yellow,magenta,green\" \"npm start --prefix nodejs\" \"php -S 0.0.0.0:8000\" \"dotnet run --project dotnet\" \"bash -c 'cd java && mvn cargo:run'\"",
     "dev": "node nodejs/server.js"
   },
   "keywords": [
@@ -15,5 +15,7 @@
   ],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
