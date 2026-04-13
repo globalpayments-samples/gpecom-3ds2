@@ -220,4 +220,4 @@ Each test performs real API calls to the GP sandbox (enrollment + authentication
 - **Payment XML API**: `https://api.sandbox.globalpay-ecommerce.com/epage-remote.cgi`
 - **Authentication**: `Authorization: securehash <sha1(sha1(timestamp.merchantid.orderid.amount.currency.cardnumber) + "." + secret)>`
 - **3DS2 Header**: `X-GP-Version: 2.2.0`
-- **Docs**: [developer.globalpay.com/ecommerce/3d-secure-two](https://developer.globalpay.com/ecommerce/3d-secure-two)
+- **Docs**: [developer.globalpayments.com/ecommerce/3d-secure-two](https://developer.globalpayments.com/ecommerce/3d-secure-two)
