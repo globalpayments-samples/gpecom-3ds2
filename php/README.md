@@ -269,3 +269,12 @@ For production: switch to HTTPS, use Redis or a database for session state, add 
 - [GP 3DS2 docs](https://developer.globalpayments.com/ecommerce/risk-management/3ds/overview)
 - [GP test card numbers](https://developer.globalpayments.com/ecommerce/resources/test-card-numbers)
 - [EMVCo 3DS spec](https://www.emvco.com/emv-technologies/3d-secure/)
+
+---
+
+## Resources
+
+- [Parent Project README](../README.md)
+- [Global Payments Developer Portal](https://developer.globalpayments.com/)
+- [API Reference](https://developer.globalpayments.com/api/references-overview)
+- [Test Cards](https://developer.globalpayments.com/resources/test-cards)
