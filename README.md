@@ -14,6 +14,15 @@ Card Entry → Enrollment Check → Method URL → Authentication → Challenge 
 4. **Challenge** — Cardholder verification if required by issuer (ACS iframe)
 5. **Payment** — Authorize payment with 3DS2 data (`POST /epage-remote.cgi`)
 
+## Features
+
+- **Full 3DS2 Flow** — Enrollment check, device fingerprinting, authentication, challenge, and payment authorization
+- **Mixed SDK/Direct API** — .NET and Java use native SDK `Secure3dService`; PHP and Node.js use direct REST + XML calls
+- **14 Test Cards** — Covers all 3DS2 outcomes (frictionless, challenge, attempted, failed, rejected)
+- **Shared Frontend** — One HTML UI drives all four backends with backend selector dropdown
+- **Automated Testing** — Shell script tests all 14 cards against any backend
+- **Docker Compose** — Run all services simultaneously with a single command
+
 ## Project Structure
 
 ```
@@ -211,6 +220,15 @@ Run the 14-card test against any backend:
 
 Each test performs real API calls to the GP sandbox (enrollment + authentication for all 14 cards) and validates the expected status and ECI values.
 
+## Security Considerations
+
+- **HMAC Authentication** — Each request signed with SHA-1 HMAC using Merchant ID + Shared Secret
+- **3DS2 Compliance** — Implements full EMV 3-D Secure 2.2 protocol for SCA compliance
+- **No Card Storage** — Card data used only for the current transaction flow
+- **Credential Isolation** — Store `SHARED_SECRET` in `.env` files, never commit to version control
+- **HTTPS Required** — Always use TLS in production; GP sandbox API enforces HTTPS
+- **Challenge Iframe** — Issuer challenges run in an isolated iframe provided by the ACS
+
 ## GP API Reference
 
 - **3DS2 REST API**: `https://api.sandbox.globalpay-ecommerce.com/3ds2/`
@@ -221,3 +239,15 @@ Each test performs real API calls to the GP sandbox (enrollment + authentication
 - **Authentication**: `Authorization: securehash <sha1(sha1(timestamp.merchantid.orderid.amount.currency.cardnumber) + "." + secret)>`
 - **3DS2 Header**: `X-GP-Version: 2.2.0`
 - **Docs**: [developer.globalpayments.com/ecommerce/3d-secure-two](https://developer.globalpayments.com/ecommerce/3d-secure-two)
+
+## Resources
+
+- [Global Payments Developer Portal](https://developer.globalpayments.com/)
+- [API Reference](https://developer.globalpayments.com/api/references-overview)
+- [Node.js SDK](https://github.com/globalpayments/node-sdk)
+- [Java SDK](https://github.com/globalpayments/java-sdk)
+- [.NET SDK](https://github.com/globalpayments/dotnet-sdk)
+
+## License
+
+MIT
