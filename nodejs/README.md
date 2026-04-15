@@ -110,3 +110,24 @@ This example demonstrates basic implementation. For production use, consider:
 - Adding payment fraud prevention measures
 - Using HTTPS in production
 - Configuring Cross-Origin Resource Sharing (CORS) appropriately
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `npm install` fails | Ensure Node.js 18+ is installed. Run `node -v` to check version |
+| Port already in use | Set `PORT=3001` in `.env` or kill existing process on port 8000 |
+| `.env` not loading | Verify `.env` file exists in the language directory (not project root) |
+| Module not found errors | Delete `node_modules/` and run `npm install` again |
+
+---
+
+## Resources
+
+- [Parent Project README](../README.md)
+- [Global Payments Developer Portal](https://developer.globalpayments.com/)
+- [API Reference](https://developer.globalpayments.com/api/references-overview)
+- [Node.js SDK](https://github.com/globalpayments/node-sdk)
+- [Test Cards](https://developer.globalpayments.com/resources/test-cards)
