@@ -7,7 +7,7 @@
 1. **Treat the root `index.html` and the PHP/Node.js/.NET/Java code as the source of truth.** The shared UI only targets those four backends in `getApiUrl()`. `python/server.py` and `docker-compose.yml` still contain starter-template `/config` flows and Portico-era wiring that do not match the live 3DS2 app.
 2. **Do not send empty notification URLs.** PHP, .NET, and Java convert blank `METHOD_NOTIFICATION_URL` / `CHALLENGE_NOTIFICATION_URL` values to `null`, and Node.js only adds those fields when configured. Empty strings produce bad 3DS2 payloads; real challenge testing still needs a public HTTPS `CHALLENGE_NOTIFICATION_URL`.
 3. **Use Node.js as the wire-format reference for direct 3DS2 calls.** `nodejs/server.js` builds the REST requests in `gp3dsRequest()`: `Authorization: securehash ...`, amount in minor units, numeric country codes such as `826`, and `method_url_completion` as `YES` or `NO`. Small shape mistakes here cause opaque GP API 400s.
-4. **Only authorize after an authenticated or attempted result.** PHP, Node.js, .NET, and Java all continue to payment only when the ECI is `05`, `06`, `02`, or `01`; failed statuses are rejected before the `charge()` call.
+4. **The ECI gate lives in verify-auth, not authorize-payment.** The check `['05', '06', '02', '01'].includes(eci)` runs inside `verify-auth` (Node.js `server.js`, .NET `Program.cs`, PHP `GpecomClient.php`, Java `GpecomServlet.java`) and sets the `authenticated` flag in the response. The `authorize-payment` handlers in all four backends pass `auth_data` straight through to the SDK's `ThreeDSecure` object and call `charge()` without re-inspecting the ECI — they trust the caller to only submit successful auth data. Add any pre-authorize ECI guard in your own layer; do not expect the demo backends to reject bad ECI values.
 
 ## Repository Structure
 
@@ -20,22 +20,21 @@
 
 ### Node.js (Express + `globalpayments-api` + direct 3DS2 REST)
 - [`nodejs/server.js`](nodejs/server.js) — single-file Node.js backend; `gp3dsRequest()`, `generateHash()`, `buildCard()`, the `simulate*()` helpers, and the anonymous `app.post()` handlers implement everything.
-- [`nodejs/.env.example`](nodejs/.env.example) — current 3DS2 env template for Node.js; `.env.sample` is still the older starter-template file.
+- [`nodejs/.env.example`](nodejs/.env.example) — 3DS2 env template for Node.js.
 - [`nodejs/logs/`](nodejs/logs/) — file-based API and webhook logs; there is no separate storage layer.
 
 ### .NET (ASP.NET Core minimal API + `GlobalPayments.Api`)
 - [`dotnet/Program.cs`](dotnet/Program.cs) — .NET reference implementation; `ConfigureApiEndpoints()`, `BuildCard()`, `BuildBrowserData()`, `ReadJson()`, and the inline `MapPost()` handlers cover the full flow.
-- [`dotnet/.env.example`](dotnet/.env.example) — current 3DS2 env template; `.env.sample` is still the older starter-template file.
+- [`dotnet/.env.example`](dotnet/.env.example) — 3DS2 env template for .NET.
 - [`dotnet/wwwroot/`](dotnet/wwwroot/) — static assets directory; `/` is served from the repo-root `index.html`, not `wwwroot/index.html`.
 
 ### Java (Jakarta Servlet + `globalpayments-sdk`)
 - [`java/src/main/java/com/globalpayments/example/GpecomServlet.java`](java/src/main/java/com/globalpayments/example/GpecomServlet.java) — single-servlet Java backend; `handleCheckEnrollment()`, `handleInitiateAuth()`, `handleVerifyAuth()`, `handleAuthorizePayment()`, `handleMethodNotification()`, and `handleChallengeNotification()` mirror the .NET flow.
 - [`java/pom.xml`](java/pom.xml) — embedded Tomcat/Cargo configuration; this fixes the default Java port to `3003`.
-- [`java/.env.example`](java/.env.example) — current 3DS2 env template; `.env.sample` is still the older starter-template file.
+- [`java/.env.example`](java/.env.example) — 3DS2 env template for Java.
 
 ### Python (placeholder, not part of the shared 3DS2 app)
 - [`python/server.py`](python/server.py) — Flask Portico starter sample with `/config` and `/process-payment`; it is not wired into the shared 3DS2 frontend.
-- [`python/.env.sample`](python/.env.sample) — placeholder Portico credentials file.
 
 ### Shared
 - [`index.html`](index.html) — shared frontend entry point; `getApiUrl()`, `checkEnrollment()`, `initiateAuthentication()`, `handleChallenge()`, `verifyAuthentication()`, and `authorizePayment()` define the browser contract.
@@ -73,28 +72,24 @@ Legacy placeholder endpoints (not part of the shared 3DS2 UI):
 
 ## Environment Variables
 
-The live 3DS2 backends use `.env.example` in `php/`, `nodejs/`, `dotnet/`, and `java/`. The checked-in `.env.sample` files are older starter-template leftovers, and `python/.env.sample` belongs to the placeholder Portico sample.
+Each live backend has a `.env.example` in its directory. Copy it to `.env` and fill in your credentials.
 
 ```bash
 GPECOM_MERCHANT_ID=your_merchant_id          # Required by PHP/Node.js/.NET/Java
 GPECOM_SHARED_SECRET=your_shared_secret      # Required securehash / GpEcomConfig secret
 GPECOM_ACCOUNT=internet                      # Defaults to internet when omitted
-GPECOM_SANDBOX=true                          # Node.js switches sandbox vs production 3DS2 REST base URL
+GPECOM_SANDBOX=true                          # Node.js/PHP: switches sandbox vs production 3DS2 REST base URL
 METHOD_NOTIFICATION_URL=https://...          # Optional; needed for real device fingerprint callbacks
 CHALLENGE_NOTIFICATION_URL=https://...       # Required for real challenge-card testing
-DEBUG_MODE=true                              # Enables request/response logging where implemented
-PORT=3001                                    # Node.js default; .NET 3002, Java 3003, PHP run.sh 8000
+DEBUG_MODE=true                              # Enables request/response logging (Node.js and PHP only)
+PORT=3001                                    # Node.js default; .NET 3002, PHP run.sh 8000; Java port is fixed at 3003 via pom.xml
+# MERCHANT_CONTACT_URL=https://developer.globalpayments.com  # Optional; all four backends, same default
+# APP_BASE_URL=https://your-domain.com       # PHP HPP helper only (php/api/hpp-request.php)
 ```
-
-Code-only extras that are read but not present in the checked-in 3DS2 templates:
-
-- `MERCHANT_CONTACT_URL` — optional in Node.js, PHP, .NET, and Java; defaults to `https://developer.globalpayments.com`
-- `APP_BASE_URL` — PHP HPP helper only; used by `php/api/hpp-request.php` to build the HPP response URL
 
 Legacy placeholder variables still appear outside the live 3DS2 flow:
 
 - `PUBLIC_API_KEY` / `SECRET_API_KEY` — used by `python/server.py` and the leftover PHP starter-template files [`php/config.php`](php/config.php) and [`php/process-payment.php`](php/process-payment.php)
-- `GPECOM_REFUND_PASSWORD` — present in `php/.env.sample`, but only checked by the legacy `verify-setup.php` script
 
 ## Test Cards / Sandbox Credentials
 
@@ -171,7 +166,7 @@ For PHP, replace `/api/<endpoint>` with `/api/<endpoint>.php` when running `php/
 
 ## Making Changes
 
-All four live implementations must keep the same enrollment/auth/verify/authorize behavior. Apply backend logic changes to PHP, Node.js, .NET, and Java in separate commits; do not treat Python as a peer implementation unless the repo is explicitly expanded. Shared files — [`index.html`](index.html), [`test-all-cards.sh`](test-all-cards.sh), [`docker-compose.yml`](docker-compose.yml), and the per-language `.env.example` / `.env.sample` files — affect multiple backends and should not be changed in isolation.
+All four live implementations must keep the same enrollment/auth/verify/authorize behavior. Apply backend logic changes to PHP, Node.js, .NET, and Java in separate commits; do not treat Python as a peer implementation unless the repo is explicitly expanded. Shared files — [`index.html`](index.html), [`test-all-cards.sh`](test-all-cards.sh), [`docker-compose.yml`](docker-compose.yml), and the per-language `.env.example` files — affect multiple backends and should not be changed in isolation.
 
 ## SDK Versions
 
