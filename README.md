@@ -150,7 +150,7 @@ cp php/.env.example php/.env
 
 **PHP:**
 ```sh
-cd php && composer install && php -S localhost:8080
+cd php && ./run.sh
 ```
 
 **Node.js:**

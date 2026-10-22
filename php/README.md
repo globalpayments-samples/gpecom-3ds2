@@ -2,14 +2,18 @@
 
 3D Secure 2 implementation for Global Payments' XML (GPeCOM) API, built on top of the `globalpayments/php-sdk`.
 
+## Requirements
+
+- PHP 8.2.35+, 8.3.36+, 8.4.27+, 8.5.12+
+- Composer 2
+
 ## Setup
 
 ```bash
-cd php && composer install && cd ..
-php -S localhost:8080
+./run.sh
 ```
 
-Open http://localhost:8080/ in your browser. Sandbox credentials are already in `.env`.
+Run from this PHP directory and open the local URL printed by the server. Configure sandbox credentials in `.env`.
 
 ## How it works
 
