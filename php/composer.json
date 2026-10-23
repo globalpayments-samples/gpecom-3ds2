@@ -21,7 +21,7 @@
         }
     ],
     "scripts": {
-        "test": "php -S localhost:8080",
+        "test": "PORT=8080 ./run.sh",
         "logs": "tail -f logs/*.log"
     }
 }
