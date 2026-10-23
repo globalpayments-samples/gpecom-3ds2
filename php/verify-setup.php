@@ -19,12 +19,14 @@ $passed = 0;
 // Check PHP version
 $checks++;
 echo "✓ Checking PHP version... ";
-if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
+$minimums = ['8.2' => '8.2.35', '8.3' => '8.3.36', '8.4' => '8.4.27', '8.5' => '8.5.12'];
+$branch = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+if (isset($minimums[$branch]) && version_compare(PHP_VERSION, $minimums[$branch], '>=')) {
     echo "OK (" . PHP_VERSION . ")\n";
     $passed++;
 } else {
     echo "FAIL\n";
-    $errors[] = "PHP 7.4 or higher required. Found: " . PHP_VERSION;
+    $errors[] = "A patched PHP release is required (8.2.35+, 8.3.36+, 8.4.27+, or 8.5.12+). Found: " . PHP_VERSION;
 }
 
 // Check required extensions
@@ -172,7 +174,7 @@ if (!empty($warnings)) {
 if ($passed === $checks) {
     echo "\n✅ Setup verification PASSED!\n";
     echo "\nYou can now start the server:\n";
-    echo "  php -S localhost:8080\n";
+    echo "  PORT=8080 ./run.sh\n";
     echo "\nThen open in your browser:\n";
     echo "  http://localhost:8080/test-3ds2.html\n";
     exit(0);
