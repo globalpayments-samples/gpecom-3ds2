@@ -114,11 +114,13 @@ def process_payment():
             'message': 'Payment processing failed',
             'error': str(e)
         }), 400
-    except Exception as e:
+    except Exception:
+        # Keep the details in the server log, the page only gets a generic message
+        app.logger.exception('process-payment failed')
         return jsonify({
             'success': False,
             'message': 'Payment processing failed',
-            'error': str(e)
+            'error': 'Unexpected server error, see the server log'
         }), 500
 
 # Add your custom endpoints here
