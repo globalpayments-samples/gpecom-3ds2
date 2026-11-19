@@ -518,6 +518,9 @@ app.post('/api/verify-auth', async (req, res) => {
 
         if (!serverTransId && !demoMode)
             return res.status(400).json({ success: false, message: 'Server transaction ID is required' });
+        // It goes into the API path, so only allow the characters a transaction ID has
+        if (!demoMode && !/^[A-Za-z0-9-]+$/.test(serverTransId))
+            return res.status(400).json({ success: false, message: 'Invalid server transaction ID' });
 
         let result;
         if (demoMode) {
@@ -534,7 +537,7 @@ app.post('/api/verify-auth', async (req, res) => {
                 __hash: hash,
             };
 
-            const doc = await gp3dsRequest('GET', `authentications/${serverTransId}`, null, queryParams);
+            const doc = await gp3dsRequest('GET', `authentications/${encodeURIComponent(serverTransId)}`, null, queryParams);
 
             logApi('verify-auth', 'RESPONSE', { status: doc.status, eci: doc.eci });
 
