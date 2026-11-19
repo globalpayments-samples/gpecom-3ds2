@@ -144,6 +144,16 @@ function logError(step, err) {
     fs.appendFileSync(path.join(logDir, '3ds2-errors.log'), entry);
 }
 
+// JSON for an inline <script>: escape <, > and & so the data can't close the tag
+function jsonForScript(value) {
+    return JSON.stringify(value)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
+        .replace(/&/g, '\\u0026')
+        .replace(/\u2028/g, '\\u2028')
+        .replace(/\u2029/g, '\\u2029');
+}
+
 function maskCard(number) {
     const clean = number.replace(/\D/g, '');
     if (clean.length < 10) return '****';
@@ -649,7 +659,7 @@ app.post('/webhooks/method-notification', (req, res) => {
     fs.appendFileSync(path.join(logDir, 'method-notifications.log'), entry);
 
     res.send(`<!DOCTYPE html><html><head><title>3DS Method Complete</title></head><body><script>
-        if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: ${JSON.stringify(serverTransId)} }, '*'); }
+        if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: ${jsonForScript(serverTransId)} }, '*'); }
     </script></body></html>`);
 });
 
@@ -667,7 +677,7 @@ app.post('/webhooks/challenge-notification', (req, res) => {
     fs.appendFileSync(path.join(logDir, 'challenge-notifications.log'), entry);
 
     res.send(`<!DOCTYPE html><html><head><title>Challenge Complete</title></head><body><script>
-        var cresData = ${decodedString};
+        var cresData = ${jsonForScript(decodedData)};
         if (window.parent !== window) { window.parent.postMessage({ type: 'challenge_complete', cres: cresData, data: cresData }, window.location.origin); }
     </script></body></html>`);
 });
