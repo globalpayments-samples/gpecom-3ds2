@@ -145,4 +145,4 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 8000))
     print(f"Server running at http://localhost:{port}")
     print("Customize this template for your use case!")
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=os.environ.get("FLASK_DEBUG") == "1")
