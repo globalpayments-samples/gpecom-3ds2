@@ -256,9 +256,8 @@ app.use(corsHeaders);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve root index.html and static assets from project root
-app.get('/', (req, res) => res.sendFile(path.join(projectRoot, 'index.html')));
-app.use(express.static(projectRoot, { index: false }));
+// Serve root index.html only, not the rest of the project (server code, .env, logs)
+app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(projectRoot, 'index.html')));
 
 // ── API: Check Enrollment ──────────────────────────────────
 // Direct REST call to GP 3DS2 API: POST /protocol-versions
