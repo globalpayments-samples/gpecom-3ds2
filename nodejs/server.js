@@ -765,6 +765,6 @@ function simulateAuthorization(params) {
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`3DS2 Node.js server running at http://localhost:${port}`);
-    console.log(`Backend: GPeCOM (merchant: ${MERCHANT_ID}, account: ${ACCOUNT_ID})`);
+    console.log(`Backend: GPeCOM (${SANDBOX ? 'sandbox' : 'production'})`);
     console.log(`3DS2 API: ${GP_3DS2_BASE_URL}`);
 });
