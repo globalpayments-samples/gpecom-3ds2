@@ -468,7 +468,7 @@ public class GpecomServlet extends HttpServlet {
 
         resp.setContentType("text/html; charset=UTF-8");
         resp.getWriter().write("<!DOCTYPE html><html><head><title>3DS Method Complete</title></head><body><script>" +
-            "if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: '" + escapeJs(serverTransId) + "' }, '*'); }" +
+            "if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: " + gson.toJson(serverTransId) + " }, '*'); }" +
             "</script></body></html>");
     }
 
@@ -485,9 +485,13 @@ public class GpecomServlet extends HttpServlet {
 
         logApi("challenge-notification", "RECEIVED", decodedString);
 
+        // Parse and re-encode so only JSON reaches the script, Gson escapes < > & by default
+        JsonElement cresData;
+        try { cresData = JsonParser.parseString(decodedString); } catch (Exception e) { cresData = new JsonObject(); }
+
         resp.setContentType("text/html; charset=UTF-8");
         resp.getWriter().write("<!DOCTYPE html><html><head><title>Challenge Complete</title></head><body><script>" +
-            "var cresData = " + decodedString + ";" +
+            "var cresData = " + gson.toJson(cresData) + ";" +
             "if (window.parent !== window) { window.parent.postMessage({ type: 'challenge_complete', cres: cresData, data: cresData }, window.location.origin); }" +
             "</script></body></html>");
     }
@@ -637,8 +641,6 @@ public class GpecomServlet extends HttpServlet {
         r.put("details", details);
         return r;
     }
-
-    private String escapeJs(String s) { return s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\""); }
 
     // ── Logging ────────────────────────────────────────────
 

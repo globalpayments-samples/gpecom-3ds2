@@ -144,6 +144,16 @@ function logError(step, err) {
     fs.appendFileSync(path.join(logDir, '3ds2-errors.log'), entry);
 }
 
+// JSON for an inline <script>: escape <, > and & so the data can't close the tag
+function jsonForScript(value) {
+    return JSON.stringify(value)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
+        .replace(/&/g, '\\u0026')
+        .replace(/\u2028/g, '\\u2028')
+        .replace(/\u2029/g, '\\u2029');
+}
+
 function maskCard(number) {
     const clean = number.replace(/\D/g, '');
     if (clean.length < 10) return '****';
@@ -256,9 +266,9 @@ app.use(corsHeaders);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve root index.html and static assets from project root
-app.get('/', (req, res) => res.sendFile(path.join(projectRoot, 'index.html')));
-app.use(express.static(projectRoot, { index: false }));
+// Serve root index.html only, not the rest of the project (server code, .env, logs)
+const indexHtml = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
+app.get(['/', '/index.html'], (req, res) => res.type('html').send(indexHtml));
 
 // ── API: Check Enrollment ──────────────────────────────────
 // Direct REST call to GP 3DS2 API: POST /protocol-versions
@@ -509,6 +519,9 @@ app.post('/api/verify-auth', async (req, res) => {
 
         if (!serverTransId && !demoMode)
             return res.status(400).json({ success: false, message: 'Server transaction ID is required' });
+        // It goes into the API path, so only allow the characters a transaction ID has
+        if (!demoMode && !/^[A-Za-z0-9-]+$/.test(serverTransId))
+            return res.status(400).json({ success: false, message: 'Invalid server transaction ID' });
 
         let result;
         if (demoMode) {
@@ -525,7 +538,7 @@ app.post('/api/verify-auth', async (req, res) => {
                 __hash: hash,
             };
 
-            const doc = await gp3dsRequest('GET', `authentications/${serverTransId}`, null, queryParams);
+            const doc = await gp3dsRequest('GET', `authentications/${encodeURIComponent(serverTransId)}`, null, queryParams);
 
             logApi('verify-auth', 'RESPONSE', { status: doc.status, eci: doc.eci });
 
@@ -650,7 +663,7 @@ app.post('/webhooks/method-notification', (req, res) => {
     fs.appendFileSync(path.join(logDir, 'method-notifications.log'), entry);
 
     res.send(`<!DOCTYPE html><html><head><title>3DS Method Complete</title></head><body><script>
-        if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: ${JSON.stringify(serverTransId)} }, '*'); }
+        if (window.parent !== window) { window.parent.postMessage({ type: 'method_complete', serverTransId: ${jsonForScript(serverTransId)} }, '*'); }
     </script></body></html>`);
 });
 
@@ -668,7 +681,7 @@ app.post('/webhooks/challenge-notification', (req, res) => {
     fs.appendFileSync(path.join(logDir, 'challenge-notifications.log'), entry);
 
     res.send(`<!DOCTYPE html><html><head><title>Challenge Complete</title></head><body><script>
-        var cresData = ${decodedString};
+        var cresData = ${jsonForScript(decodedData)};
         if (window.parent !== window) { window.parent.postMessage({ type: 'challenge_complete', cres: cresData, data: cresData }, window.location.origin); }
     </script></body></html>`);
 });
@@ -753,6 +766,6 @@ function simulateAuthorization(params) {
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`3DS2 Node.js server running at http://localhost:${port}`);
-    console.log(`Backend: GPeCOM (merchant: ${MERCHANT_ID}, account: ${ACCOUNT_ID})`);
+    console.log(`Backend: GPeCOM (${SANDBOX ? 'sandbox' : 'production'})`);
     console.log(`3DS2 API: ${GP_3DS2_BASE_URL}`);
 });

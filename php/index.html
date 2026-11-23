@@ -108,7 +108,7 @@
     </footer>
 
     <!-- jQuery and rxp-hpp.js -->
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha384-AQhQSZGQWTMJhb/TdS7NWpCmOM/8lIEsaevSU5oZtt8pQKoa+uJL4A2WnQ0O5Zj2" crossorigin="anonymous"></script>
     <script src="https://pay.sandbox.realexpayments.com/pay/js/rxp-hpp.js"></script>
     <script>
         $(document).ready(function() {
@@ -148,10 +148,11 @@
         }
 
         function showError(message) {
-            $("#hppContainer").html(
-                '<div class="gp-alert gp-alert-error" style="margin: 2rem;">' +
-                '<strong>Error</strong><br>' + message +
-                '</div>'
+            $("#hppContainer").empty().append(
+                $('<div class="gp-alert gp-alert-error" style="margin: 2rem;">').append(
+                    $('<strong>').text('Error'), '<br>',
+                    document.createTextNode(message)
+                )
             );
         }
 
@@ -169,19 +170,19 @@
                 console.log("Payment Response:", response);
 
                 if (response.RESULT === '00') {
-                    $("#hppContainer").html(
-                        '<div class="gp-alert gp-alert-success" style="margin: 2rem; text-align: center;">' +
-                        '<strong>Payment Successful!</strong><br>' +
-                        'Order ID: ' + (response.ORDER_ID || 'N/A') + '<br>' +
-                        'Auth Code: ' + (response.AUTHCODE || 'N/A') +
-                        '</div>'
+                    $("#hppContainer").empty().append(
+                        $('<div class="gp-alert gp-alert-success" style="margin: 2rem; text-align: center;">').append(
+                            $('<strong>').text('Payment Successful!'), '<br>',
+                            document.createTextNode('Order ID: ' + (response.ORDER_ID || 'N/A')), '<br>',
+                            document.createTextNode('Auth Code: ' + (response.AUTHCODE || 'N/A'))
+                        )
                     );
                 } else {
-                    $("#hppContainer").html(
-                        '<div class="gp-alert gp-alert-error" style="margin: 2rem; text-align: center;">' +
-                        '<strong>Payment Failed</strong><br>' +
-                        (response.MESSAGE || 'An error occurred') +
-                        '</div>'
+                    $("#hppContainer").empty().append(
+                        $('<div class="gp-alert gp-alert-error" style="margin: 2rem; text-align: center;">').append(
+                            $('<strong>').text('Payment Failed'), '<br>',
+                            document.createTextNode(response.MESSAGE || 'An error occurred')
+                        )
                     );
                 }
             }
