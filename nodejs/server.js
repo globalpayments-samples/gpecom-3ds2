@@ -267,7 +267,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve root index.html only, not the rest of the project (server code, .env, logs)
-app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(projectRoot, 'index.html')));
+const indexHtml = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
+app.get(['/', '/index.html'], (req, res) => res.type('html').send(indexHtml));
 
 // ── API: Check Enrollment ──────────────────────────────────
 // Direct REST call to GP 3DS2 API: POST /protocol-versions
