@@ -275,6 +275,8 @@ public class GpecomServlet extends HttpServlet {
                     .withCurrency(currency)
                     .withAuthenticationSource(AuthenticationSource.Browser)
                     .withMethodUrlCompletion(completion)
+                    // without it the sandbox ACS challenges every Visa test card
+                    .withChallengeRequestIndicator(ChallengeRequestIndicator.NoPreference)
                     .withOrderCreateDate(DateTime.now())
                     .withAddress(address, AddressType.Shipping)
                     .withAddress(address, AddressType.Billing)

@@ -405,6 +405,8 @@ app.post('/api/initiate-auth', async (req, res) => {
                 merchant_id: MERCHANT_ID,
                 account_id: ACCOUNT_ID,
                 method_url_completion: methodUrlComplete,
+                // without it the sandbox ACS challenges every Visa test card
+                challenge_request_indicator: 'NO_PREFERENCE',
                 merchant_contact_url: MERCHANT_CONTACT_URL,
                 card_detail: {
                     number: cardNumber,

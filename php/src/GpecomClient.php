@@ -9,6 +9,7 @@ use GlobalPayments\Api\Entities\Address;
 use GlobalPayments\Api\Entities\BrowserData;
 use GlobalPayments\Api\Entities\Enums\AddressType;
 use GlobalPayments\Api\Entities\Enums\AuthenticationSource;
+use GlobalPayments\Api\Entities\Enums\ChallengeRequestIndicator;
 use GlobalPayments\Api\Entities\Enums\ChallengeWindowSize;
 use GlobalPayments\Api\Entities\Enums\ColorDepth;
 use GlobalPayments\Api\Entities\Enums\MethodUrlCompletion;
@@ -172,6 +173,8 @@ class GpecomClient
             ->withCurrency($currency)
             ->withAuthenticationSource(AuthenticationSource::BROWSER)
             ->withMethodUrlCompletion($methodUrlComplete)
+            // without it the sandbox ACS challenges every Visa test card
+            ->withChallengeRequestIndicator(ChallengeRequestIndicator::NO_PREFERENCE)
             ->withOrderCreateDate(date('Y-m-d H:i:s'))
             ->withAddress($address, AddressType::SHIPPING)
             ->withAddress($address, AddressType::BILLING)
