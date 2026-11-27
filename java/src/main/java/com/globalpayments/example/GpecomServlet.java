@@ -388,7 +388,7 @@ public class GpecomServlet extends HttpServlet {
             if (amount.isEmpty() || !validateAmount(amount)) { writeJson(resp, 400, errorResponse("Invalid amount")); return; }
             if (!validateCurrency(currency)) { writeJson(resp, 400, errorResponse("Invalid currency")); return; }
             if (!cvv.isEmpty() && !validateCvv(cvv)) { writeJson(resp, 400, errorResponse("Invalid CVV")); return; }
-            if (authDataObj == null && !demoMode) { writeJson(resp, 400, errorResponse("Authentication data is required")); return; }
+            if ((authDataObj == null || authDataObj.size() == 0) && !demoMode) { writeJson(resp, 400, errorResponse("Authentication data is required")); return; }
 
             String expDate = getString(data, "exp_date", "1228");
             String cardHolder = getString(data, "card_holder", "Test Customer");
