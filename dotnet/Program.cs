@@ -354,6 +354,8 @@ public class Program
                     return Results.Json(new { success = false, message = "Invalid currency" }, statusCode: 400);
                 if (!string.IsNullOrEmpty(cvv) && !ValidateCvv(cvv))
                     return Results.Json(new { success = false, message = "Invalid CVV" }, statusCode: 400);
+                if ((authData == null || !authData.Value.EnumerateObject().Any()) && !demoMode)
+                    return Results.Json(new { success = false, message = "Authentication data is required" }, statusCode: 400);
 
                 var expDate = GetString(data, "exp_date", "1228");
                 var cardHolder = GetString(data, "card_holder", "Test Customer");
