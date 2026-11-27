@@ -766,6 +766,14 @@ function simulateAuthorization(params) {
 
 // ── Start ──────────────────────────────────────────────────
 
+// A body that isn't valid JSON gets a JSON 400 instead of the Express error page
+app.use((err, req, res, next) => {
+    if (err.type === 'entity.parse.failed') {
+        return res.status(400).json({ success: false, message: 'Invalid JSON body' });
+    }
+    next(err);
+});
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`3DS2 Node.js server running at http://localhost:${port}`);
     console.log(`Backend: GPeCOM (${SANDBOX ? 'sandbox' : 'production'})`);
