@@ -11,18 +11,19 @@ This example demonstrates card payment processing using ASP.NET Core and the Glo
 
 - `Program.cs` - Main application file containing server setup and payment processing
 - `wwwroot/index.html` - Client-side payment form
-- `.env.sample` - Template for environment variables
+- `.env.example` - Template for environment variables
 - `run.sh` - Convenience script to run the application
 - `appsettings.json` - Application configuration file
 
 ## Setup
 
 1. Clone this repository
-2. Copy `.env.sample` to `.env`
-3. Update `.env` with your Global Payments credentials:
+2. Copy `.env.example` to `.env`
+3. Update `.env` with your GP eCommerce sandbox credentials:
    ```
-   PUBLIC_API_KEY=pk_test_xxx
-   SECRET_API_KEY=sk_test_xxx
+   GPECOM_MERCHANT_ID=your_merchant_id
+   GPECOM_SHARED_SECRET=your_shared_secret
+   GPECOM_ACCOUNT=internet
    ```
 4. Install dependencies:
    ```bash

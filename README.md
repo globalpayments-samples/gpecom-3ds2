@@ -17,7 +17,7 @@ Card Entry → Enrollment Check → Method URL → Authentication → Challenge 
 ## Features
 
 - **Full 3DS2 Flow** — Enrollment check, device fingerprinting, authentication, challenge, and payment authorization
-- **Mixed SDK/Direct API** — .NET and Java use native SDK `Secure3dService`; PHP and Node.js use direct REST + XML calls
+- **Mixed SDK/Direct API**: PHP, .NET and Java use native SDK `Secure3dService`; Node.js uses direct REST calls for 3DS2
 - **14 Test Cards** — Covers all 3DS2 outcomes (frictionless, challenge, attempted, failed, rejected)
 - **Shared Frontend** — One HTML UI drives all four backends with backend selector dropdown
 - **Automated Testing** — Shell script tests all 14 cards against any backend
@@ -29,7 +29,7 @@ Card Entry → Enrollment Check → Method URL → Authentication → Challenge 
 ├── index.html              # Shared frontend (backend selector, test cards, 3DS2 form)
 ├── test-all-cards.sh       # Automated 14-card test script
 │
-├── php/                    # PHP — custom REST/XML client (port 8080)
+├── php/                    # PHP: SDK client and HPP checkout page (port 8000)
 │   ├── src/GpecomClient.php    # Core 3DS2 + payment client
 │   ├── api/                    # Endpoint handlers (check-enrollment, initiate-auth, etc.)
 │   └── webhooks/               # Method + challenge notification handlers
@@ -50,12 +50,12 @@ Card Entry → Enrollment Check → Method URL → Authentication → Challenge 
 
 | Language | SDK | Version | 3DS2 Approach |
 |----------|-----|---------|---------------|
-| PHP | None (custom client) | — | Direct REST + XML API calls |
+| PHP | `globalpayments/php-sdk` | 13.3.0 | Native `Secure3dService` |
 | Node.js | `globalpayments-api` | 3.10.6 | Direct REST for 3DS2, SDK for payment auth |
 | .NET | `GlobalPayments.Api` | 9.0.16 | Native `Secure3dService` |
 | Java | `globalpayments-sdk` | 14.2.20 | Native `Secure3dService` |
 
-**Why PHP and Node.js don't use the SDK for 3DS2:** The PHP SDK's `Gp3DSProvider` exists but silently swallows errors. The Node.js SDK doesn't implement `processSecure3d()` at all. Both use direct HTTP calls to the GP 3DS2 REST API instead.
+**Why Node.js doesn't use the SDK for 3DS2:** The Node.js SDK doesn't implement `processSecure3d()` at all, so it uses direct HTTP calls to the GP 3DS2 REST API instead.
 
 ## Quick Start
 
@@ -168,15 +168,17 @@ cd dotnet && dotnet run
 cd java && mvn clean package cargo:run
 ```
 
-#### 3. Serve the frontend
+#### 3. Open the page
 
-In a separate terminal from the project root:
+Node.js, .NET and Java serve the 3DS2 page themselves and pick their own backend from the port, so open the backend you started:
 
-```sh
-python3 -m http.server 8000
-```
+| Backend | URL |
+|---------|-----|
+| Node.js | http://localhost:3001 |
+| .NET    | http://localhost:3002 |
+| Java    | http://localhost:3003 |
 
-Then open **`http://localhost:8000`** and select your backend.
+The PHP server runs on **`http://localhost:8000`** and serves the PHP HPP checkout page. Its 3DS2 endpoints are at `/api/<endpoint>.php` and can be driven with `./test-all-cards.sh 8000 php`.
 
 ## API Endpoints
 
@@ -189,7 +191,7 @@ All four backends expose the same API contract:
 | `/api/verify-auth` | POST | Verify challenge result |
 | `/api/authorize-payment` | POST | Authorize payment with 3DS2 data |
 
-PHP uses `/php/api/<endpoint>.php` paths. The frontend handles this automatically.
+PHP uses `/api/<endpoint>.php` paths when started with `php/run.sh`.
 
 ## Test Cards
 
@@ -212,7 +214,7 @@ Use any future expiry (e.g. `1228`) and any CVV (e.g. `123`).
 Run the 14-card test against any backend:
 
 ```sh
-./test-all-cards.sh 8080 php      # PHP
+./test-all-cards.sh 8000 php      # PHP
 ./test-all-cards.sh 3001 nodejs   # Node.js
 ./test-all-cards.sh 3002 dotnet   # .NET
 ./test-all-cards.sh 3003 java     # Java
