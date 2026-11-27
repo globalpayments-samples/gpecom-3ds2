@@ -13,18 +13,19 @@ This example demonstrates card payment processing using Jakarta EE and the Globa
 - `src/main/java/com/globalpayments/example/ProcessPaymentServlet.java` - Main servlet handling payment processing
 - `src/main/webapp/index.html` - Client-side payment form
 - `src/main/webapp/WEB-INF/web.xml` - Web application configuration
-- `.env.sample` - Template for environment variables
+- `.env.example` - Template for environment variables
 - `pom.xml` - Project dependencies and build configuration
 - `run.sh` - Convenience script to run the application
 
 ## Setup
 
 1. Clone this repository
-2. Copy `.env.sample` to `.env`
-3. Update `.env` with your Global Payments credentials:
+2. Copy `.env.example` to `.env`
+3. Update `.env` with your GP eCommerce sandbox credentials:
    ```
-   PUBLIC_API_KEY=pk_test_xxx
-   SECRET_API_KEY=sk_test_xxx
+   GPECOM_MERCHANT_ID=your_merchant_id
+   GPECOM_SHARED_SECRET=your_shared_secret
+   GPECOM_ACCOUNT=internet
    ```
 4. Install dependencies:
    ```bash
@@ -36,7 +37,7 @@ This example demonstrates card payment processing using Jakarta EE and the Globa
    ```
    Or manually:
    ```bash
-   mvn jetty:run
+   mvn clean package cargo:run
    ```
 
 ## Implementation Details

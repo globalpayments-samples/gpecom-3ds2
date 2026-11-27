@@ -13,17 +13,18 @@ This example demonstrates card payment processing using Express.js and the Globa
 - `server.js` - Main application file containing server setup and payment processing
 - `index.html` - Client-side payment form
 - `package.json` - Project dependencies and scripts
-- `.env.sample` - Template for environment variables
+- `.env.example` - Template for environment variables
 - `run.sh` - Convenience script to run the application
 
 ## Setup
 
 1. Clone this repository
-2. Copy `.env.sample` to `.env`
-3. Update `.env` with your Global Payments credentials:
+2. Copy `.env.example` to `.env`
+3. Update `.env` with your GP eCommerce sandbox credentials:
    ```
-   PUBLIC_API_KEY=pk_test_xxx
-   SECRET_API_KEY=sk_test_xxx
+   GPECOM_MERCHANT_ID=your_merchant_id
+   GPECOM_SHARED_SECRET=your_shared_secret
+   GPECOM_ACCOUNT=internet
    ```
 4. Install dependencies:
    ```bash

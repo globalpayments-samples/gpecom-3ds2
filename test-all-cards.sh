@@ -8,8 +8,8 @@ BASE="http://localhost:$PORT"
 
 # PHP uses different API paths
 if [ "$BACKEND" = "php" ]; then
-  API_ENROLL="/php/api/check-enrollment.php"
-  API_AUTH="/php/api/initiate-auth.php"
+  API_ENROLL="/api/check-enrollment.php"
+  API_AUTH="/api/initiate-auth.php"
 else
   API_ENROLL="/api/check-enrollment"
   API_AUTH="/api/initiate-auth"
